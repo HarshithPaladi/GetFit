@@ -15,14 +15,15 @@ const Challenges = () => {
 	const [cookies] = useCookies(["jwt"]);
 	axios.defaults.withCredentials = true;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
-		const handleViewChallenge = (challenge) => {
-			console.log("Selected challenge: ", challenge);
-			setSelectedChallenge(challenge);
-		};
 
-		const onHide = () => {
-			setSelectedChallenge(null);
-		};
+	const handleViewChallenge = (challenge) => {
+		console.log("Selected challenge: ", challenge);
+		setSelectedChallenge(challenge);
+	};
+
+	const onHide = () => {
+		setSelectedChallenge(null);
+	};
 
 	const fetchData = async () => {
 		try {
@@ -217,43 +218,49 @@ const Challenges = () => {
 		</Modal>
 	);
 
-const renderChallengeActions = (rowData) => {
-	const { challengeId, challengeType, challengeGoal } = rowData;
+	const renderChallengeActions = (rowData) => {
+		const { challengeId, challengeType, challengeGoal, createdBy } = rowData;
 
-	if (selectedChallenges.includes(challengeId)) {
-		return (
-			<div className="d-flex">
-				<button
-					className="btn btn-sm btn-danger"
-					onClick={() => handleRemoveParticipant(challengeId)}
+		if (selectedChallenges.includes(challengeId)) {
+			return (
+				<div className="d-flex">
+					<button
+						className="btn btn-sm btn-danger"
+						onClick={() => handleRemoveParticipant(challengeId)}
+					>
+						Remove
+					</button>
+				</div>
+			);
+		} else {
+			return (
+				<div className="d-flex">
+					<button
+						className="btn btn-sm btn-primary me-2"
+						onClick={() => handleParticipateChallenge(challengeId)}
+					>
+						Participate
+					</button>
+				</div>
+			);
+		}
+	};
+
+	const renderChallengeDeleteButton = (rowData) => {
+		const { createdBy } = rowData;
+		if (createdBy === localStorage.getItem("userName")) {
+			return (
+				<Button
+					variant="danger"
+					onClick={() => handleDeleteChallenge(rowData.challengeId)}
 				>
-					Remove
-				</button>
-			</div>
-		);
-	} else {
-		return (
-			<div className="d-flex">
-				<button
-					className="btn btn-sm btn-primary me-2"
-					onClick={() => handleParticipateChallenge(challengeId)}
-				>
-					Participate
-				</button>
-			</div>
-		);
-	}
-};
-
-
-	const renderChallengeDeleteButton = (rowData) => (
-		<Button
-			variant="danger"
-			onClick={() => handleDeleteChallenge(rowData.challengeId)}
-		>
-			Delete
-		</Button>
-	);
+					Delete
+				</Button>
+			);
+		} else {
+			return null;
+		}
+	};
 
 	return (
 		<div>

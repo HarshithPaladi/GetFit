@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Button, Card } from "react-bootstrap";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -6,22 +6,21 @@ import { useCookies } from "react-cookie";
 const Vitals = () => {
 	const [steps, setSteps] = useState(null);
 	const [distance, setDistance] = useState(null);
-    const [calories, setCalories] = useState(null);
-    const [cookies] = useCookies(["jwt"]);
-    
+	const [calories, setCalories] = useState(null);
+	const [cookies] = useCookies(["jwt"]);
+
 	const fetchData = async (endpoint) => {
-        try {
-            axios.defaults.withCredentials = true;
-            axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
-            const response = await axios.post(endpoint, {
-                headers: {
-                    Authorization: `Bearer ${cookies.jwt}`,
-                },
-                withCredentials: true,
-            });
+		try {
+			axios.defaults.withCredentials = true;
+			axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
+			const response = await axios.post(endpoint, {
+				headers: {
+					Authorization: `Bearer ${cookies.jwt}`,
+				},
+				withCredentials: true,
+			});
 			return response.data;
-    } 
-        catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	};
@@ -37,9 +36,9 @@ const Vitals = () => {
 			0,
 			0
 		).toISOString();
-        const endTime = now.toISOString();
-        // get number of milliseconds between start and end time
-        const bucketDurationMillis = now.getTime() - new Date(startTime).getTime();
+		const endTime = now.toISOString();
+		// get number of milliseconds between start and end time
+		const bucketDurationMillis = now.getTime() - new Date(startTime).getTime();
 
 		const stepsData = await fetchData(
 			`https://localhost:7155/api/googlefit/steps?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
@@ -54,12 +53,11 @@ const Vitals = () => {
 		setSteps(stepsData);
 		setDistance(distanceData);
 		setCalories(caloriesData);
-    };
-    
-    useEffect(() => {
-        handleFetchData();
-    }, []);
-    
+	};
+
+	useEffect(() => {
+		handleFetchData();
+	}, []);
 
 	return (
 		<Container>
@@ -68,32 +66,26 @@ const Vitals = () => {
 				Fetch Data
 			</Button>
 
-			{steps && (
-				<Card>
-					<Card.Body>
-						<Card.Title>Steps</Card.Title>
-						<Card.Text>{steps}</Card.Text>
-					</Card.Body>
-				</Card>
-			)}
+			<Card>
+				<Card.Body>
+					<Card.Title>Steps</Card.Title>
+					<Card.Text>{steps ?? "No data"}</Card.Text>
+				</Card.Body>
+			</Card>
 
-			{distance && (
-				<Card>
-					<Card.Body>
-						<Card.Title>Distance</Card.Title>
-						<Card.Text>{distance}</Card.Text>
-					</Card.Body>
-				</Card>
-			)}
+			<Card>
+				<Card.Body>
+					<Card.Title>Distance</Card.Title>
+					<Card.Text>{distance ?? "No data"}</Card.Text>
+				</Card.Body>
+			</Card>
 
-			{calories && (
-				<Card>
-					<Card.Body>
-						<Card.Title>Calories</Card.Title>
-						<Card.Text>{calories}</Card.Text>
-					</Card.Body>
-				</Card>
-			)}
+			<Card>
+				<Card.Body>
+					<Card.Title>Calories</Card.Title>
+					<Card.Text>{calories ?? "No data"}</Card.Text>
+				</Card.Body>
+			</Card>
 		</Container>
 	);
 };
