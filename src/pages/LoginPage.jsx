@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { set, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -13,45 +13,61 @@ const LoginComponent = () => {
 		formState: { errors },
 	} = useForm();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [cookies, setCookie] = useCookies(["jwt"]);
 	const [showModal, setShowModal] = useState(false);
 	const [message, setMessage] = useState(null);
 	const onSubmit = async (data) => {
-  try {
-    const response = await axios.post(
-      'https://localhost:7155/api/auth/login',
-      data
-    );
-	  const { status, data: responseData } = response;
-	  console.log(`Status: ${status}\nResponse: ${JSON.stringify(responseData)}`);
+		try {
+			const response = await axios.post(
+				"https://localhost:7155/api/auth/login",
+				data
+			);
+			const { status, data: responseData } = response;
+			console.log(
+				`Status: ${status}\nResponse: ${JSON.stringify(responseData)}`
+			);
 
-    if (status === 200 && responseData.TwoFactorEnabled) {
-      navigate('/2fa-login');
-    } else if (status === 200) {
-      console.log('User is authenticated:');
-      let userName = responseData.userName;
-      localStorage.setItem('userName', userName);
-      setCookie('jwt', responseData.token, { path: '/' }, { httpOnly: true });
-      setCookie(
-        'refreshToken',
-        responseData.refreshToken,
-        { path: '/' },
-        { httpOnly: true }
-      );
-      setMessage('Login successful');
-      setShowModal(true);
-    } else if (status === 400) {
-      console.log('User is not authenticated');
-      setMessage(`Failed to login. Status code: ${status}. Response: ${JSON.stringify(responseData)}`);
-      setShowModal(true);
-    }
-  } catch (error) {
-    // Handle error
-    console.log(error);
-	setMessage("Error: " + error.message+ ".\nPlease check your input and try again.");
-    setShowModal(true);
-  }
-};
+			if (status === 200 && responseData.TwoFactorEnabled) {
+				navigate("/2fa-login");
+			} else if (status === 200) {
+				console.log("User is authenticated:");
+				let userName = responseData.userName;
+				localStorage.setItem("userName", userName);
+				setCookie("jwt", responseData.token, { path: "/" }, { httpOnly: true });
+				setCookie(
+					"refreshToken",
+					responseData.refreshToken,
+					{ path: "/" },
+					{ httpOnly: true }
+				);
+				setMessage("Login successful");
+				setShowModal(true);
+				// Redirect to referring page if available
+				const { state } = location;
+				if (state && state.from) {
+					navigate(state.from);
+				} else {
+					navigate("/");
+				}
+			} else if (status === 400) {
+				console.log("User is not authenticated");
+				setMessage(
+					`Failed to login. Status code: ${status}. Response: ${JSON.stringify(
+						responseData
+					)}`
+				);
+				setShowModal(true);
+			}
+		} catch (error) {
+			// Handle error
+			console.log(error);
+			setMessage(
+				"Error: " + error.message + ".\nPlease check your input and try again."
+			);
+			setShowModal(true);
+		}
+	};
 
 	return (
 		<Container>

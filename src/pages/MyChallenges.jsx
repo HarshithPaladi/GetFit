@@ -134,8 +134,8 @@ const handleUpdateProgress = async () => {
 			>
 				<Column field="name" header="Name" sortable />
 				<Column field="description" header="Description" />
-				<Column field="challengeType" header="Challenge Type" />
-				<Column field="challengeGoal" header="Challenge Goal" />
+				<Column field="challengeType" header="Challenge Type" sortable/>
+				<Column field="challengeGoal" header="Challenge Goal" sortable />
 				<Column field="startDate" header="Start Date" sortable />
 				<Column field="endDate" header="End Date" sortable />
 				<Column field="createdBy" header="Created By" sortable />
