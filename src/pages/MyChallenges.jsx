@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { FaSync } from "react-icons/fa";
 import { DataTable } from "primereact/datatable";
+import { Spinner,Button } from "react-bootstrap";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { ProgressBar } from "primereact/progressbar";
@@ -8,6 +10,7 @@ import axios from "axios";
 
 const MyChallenges = () => {
 	const [challenges, setChallenges] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const [selectedChallenge, setSelectedChallenge] = useState(null);
 	const [selectedChallengeProgress, setSelectedChallengeProgress] = useState({
 		progressValue: 0,
@@ -62,6 +65,9 @@ const handleUpdateProgress = async () => {
 		console.error(error);
 	}
 };
+const handleRefreshData = () => {
+	fetchChallenges();
+};
 
 
 	const getUserId = async () => {
@@ -80,36 +86,39 @@ const handleUpdateProgress = async () => {
 			console.error(error);
 		}
 	};
-
+const fetchChallenges = async () => {
+	try {
+		setIsLoading(true);
+		const response = await axios.get(
+			"https://localhost:7155/api/Challenges/my-challenges"
+		);
+		const challengeIds = response.data;
+		const challengeDetails = await Promise.all(
+			challengeIds.map(async (challengeId) => {
+				const challengeResponse = await axios.get(
+					`https://localhost:7155/api/Challenges/${challengeId}`
+				);
+				const challenge = challengeResponse.data;
+				return challenge;
+			})
+		);
+		challengeDetails.forEach((challenge) => {
+			challenge.startDate = new Date(challenge.startDate).toDateString(
+				"yyyy-MM-dd"
+			);
+			challenge.endDate = new Date(challenge.endDate).toDateString(
+				"yyyy-MM-dd"
+			);
+		});
+		setChallenges(challengeDetails);
+	} catch (error) {
+		console.log(error);
+	} finally {
+		setIsLoading(false);
+	}
+};
 	useEffect(() => {
-		const fetchChallenges = async () => {
-			try {
-				const response = await axios.get(
-					"https://localhost:7155/api/Challenges/my-challenges"
-				);
-				const challengeIds = response.data;
-				const challengeDetails = await Promise.all(
-					challengeIds.map(async (challengeId) => {
-						const challengeResponse = await axios.get(
-							`https://localhost:7155/api/Challenges/${challengeId}`
-						);
-						const challenge = challengeResponse.data;
-						return challenge;
-					})
-				);
-				challengeDetails.forEach((challenge) => {
-					challenge.startDate = new Date(challenge.startDate).toDateString(
-						"yyyy-MM-dd"
-					);
-					challenge.endDate = new Date(challenge.endDate).toDateString(
-						"yyyy-MM-dd"
-					);
-				});
-				setChallenges(challengeDetails);
-			} catch (error) {
-				console.log(error);
-			}
-		};
+		
 
 		fetchChallenges();
 		console.log("Selected challenge progress: ", selectedChallengeProgress);
@@ -117,6 +126,14 @@ const handleUpdateProgress = async () => {
 
 	return (
 		<>
+			
+			<Button variant="light" onClick={handleRefreshData} disabled={isLoading}>
+				{isLoading ? (
+					<Spinner animation="border" size="sm" />
+				) : (
+					<FaSync style={{ verticalAlign: "middle" }} />
+				)}
+			</Button>
 			<DataTable
 				value={challenges}
 				selectionMode="single"
@@ -134,13 +151,12 @@ const handleUpdateProgress = async () => {
 			>
 				<Column field="name" header="Name" sortable />
 				<Column field="description" header="Description" />
-				<Column field="challengeType" header="Challenge Type" sortable/>
+				<Column field="challengeType" header="Challenge Type" sortable />
 				<Column field="challengeGoal" header="Challenge Goal" sortable />
 				<Column field="startDate" header="Start Date" sortable />
 				<Column field="endDate" header="End Date" sortable />
 				<Column field="createdBy" header="Created By" sortable />
 			</DataTable>
-
 			{selectedChallenge && (
 				<Dialog
 					visible={true}
@@ -174,7 +190,10 @@ const handleUpdateProgress = async () => {
 									showValue={false}
 								/>
 								<span>ProgressValue: </span>
-								<span>{selectedChallengeProgress.progressValue}/{selectedChallenge.value.challengeGoal}</span>
+								<span>
+									{selectedChallengeProgress.progressValue}/
+									{selectedChallenge.value.challengeGoal}
+								</span>
 							</div>
 						)}
 						<div>

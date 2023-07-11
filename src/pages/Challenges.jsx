@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Modal, Form } from "react-bootstrap";
+import { FaSync } from "react-icons/fa";
+import { Card, Button, Modal, Form,Spinner } from "react-bootstrap";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
@@ -12,6 +13,7 @@ const Challenges = () => {
 	const [showParticipateModal, setShowParticipateModal] = useState(false);
 	const [selectedChallenge, setSelectedChallenge] = useState(null);
 	const [selectedChallenges, setSelectedChallenges] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const [cookies] = useCookies(["jwt"]);
 	axios.defaults.withCredentials = true;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
@@ -27,10 +29,13 @@ const Challenges = () => {
 
 	const fetchData = async () => {
 		try {
+			setIsLoading(true);
 			const response = await axios.get("https://localhost:7155/api/challenges");
 			setChallenges(response.data);
 		} catch (error) {
 			console.error(error);
+		} finally {
+			setIsLoading(false);
 		}
 
 		try {
@@ -43,6 +48,11 @@ const Challenges = () => {
 			console.error(error);
 		}
 	};
+	const handleRefreshData = () => {
+		fetchData();
+	};
+
+
 
 	useEffect(() => {
 		fetchData();
@@ -153,7 +163,7 @@ const Challenges = () => {
 						</select>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="challengeGoal">Challenge Goal</label>
+						<label htmlFor="challengeGoal">Challenge Goal(steps,calories,meters)</label>
 						<input
 							type="number"
 							id="challengeGoal"
@@ -267,6 +277,14 @@ const Challenges = () => {
 			<Button variant="primary" onClick={() => setShowCreateModal(true)}>
 				Create Challenge
 			</Button>
+			<Button variant="light" onClick={handleRefreshData} disabled={isLoading}>
+				{isLoading ? (
+					<Spinner animation="border" size="sm" />
+				) : (
+					<FaSync style={{ verticalAlign: "middle" }} />
+				)}
+			</Button>
+
 			<DataTable
 				value={challenges}
 				paginator
