@@ -57,9 +57,8 @@ const Challenges = () => {
 			challengeId: "string",
 			name: formData.get("name"),
 			description: formData.get("description"),
-			calories: parseInt(formData.get("calories")) || null,
-			kilometers: parseInt(formData.get("kilometers")) || null,
-			steps: parseInt(formData.get("steps")) || null,
+			challengeType: formData.get("challengeType"),
+			challengeGoal: formData.get("challengeGoal"),
 			startDate: formData.get("startDate"),
 			endDate: formData.get("endDate"),
 			createdBy: "string",
@@ -140,30 +139,26 @@ const Challenges = () => {
 						/>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="calories">Calories</label>
-						<input
-							type="number"
-							id="calories"
-							name="calories"
+						<label htmlFor="challengeType">Challenge Type</label>
+						<select
+							id="challengeType"
+							name="challengeType"
 							className="form-control"
-						/>
+							required
+						>
+							<option value="steps">Steps</option>
+							<option value="calories">Calories</option>
+							<option value="distance">Distance</option>
+						</select>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="kilometers">Kilometers</label>
+						<label htmlFor="challengeGoal">Challenge Goal</label>
 						<input
 							type="number"
-							id="kilometers"
-							name="kilometers"
+							id="challengeGoal"
+							name="challengeGoal"
 							className="form-control"
-						/>
-					</div>
-					<div className="mb-3">
-						<label htmlFor="steps">Steps</label>
-						<input
-							type="number"
-							id="steps"
-							name="steps"
-							className="form-control"
+							required
 						/>
 					</div>
 					<div className="mb-3">
@@ -222,33 +217,34 @@ const Challenges = () => {
 		</Modal>
 	);
 
-	const renderChallengeActions = (rowData) => {
-		const { challengeId } = rowData;
+const renderChallengeActions = (rowData) => {
+	const { challengeId, challengeType, challengeGoal } = rowData;
 
-		if (selectedChallenges.includes(challengeId)) {
-			return (
-				<div className="d-flex">
-					<button
-						className="btn btn-sm btn-danger"
-						onClick={() => handleRemoveParticipant(challengeId)}
-					>
-						Remove
-					</button>
-				</div>
-			);
-		} else {
-			return (
-				<div className="d-flex">
-					<button
-						className="btn btn-sm btn-primary me-2"
-						onClick={() => handleParticipateChallenge(challengeId)}
-					>
-						Participate
-					</button>
-				</div>
-			);
-		}
-	};
+	if (selectedChallenges.includes(challengeId)) {
+		return (
+			<div className="d-flex">
+				<button
+					className="btn btn-sm btn-danger"
+					onClick={() => handleRemoveParticipant(challengeId)}
+				>
+					Remove
+				</button>
+			</div>
+		);
+	} else {
+		return (
+			<div className="d-flex">
+				<button
+					className="btn btn-sm btn-primary me-2"
+					onClick={() => handleParticipateChallenge(challengeId)}
+				>
+					Participate
+				</button>
+			</div>
+		);
+	}
+};
+
 
 	const renderChallengeDeleteButton = (rowData) => (
 		<Button
@@ -279,39 +275,37 @@ const Challenges = () => {
 			>
 				<Column field="name" header="Name" sortable></Column>
 				<Column field="description" header="Description"></Column>
-				<Column field="calories" header="Calories" sortable></Column>
-				<Column field="kilometers" header="Kilometers" sortable></Column>
-				<Column field="steps" header="Steps" sortable></Column>
+				<Column field="challengeType" header="Challenge Type" sortable></Column>
+				<Column field="challengeGoal" header="Challenge Goal" sortable></Column>
 				<Column field="createdBy" header="Created By" sortable></Column>
-				<Column header="Actions" body={renderChallengeActions} sortable></Column>
-				<Column header="Delete" body={renderChallengeDeleteButton} sortable></Column>
+				<Column header="Actions" body={renderChallengeActions}></Column>
+				<Column header="Delete" body={renderChallengeDeleteButton}></Column>
 			</DataTable>
 			{renderCreateModal()}
 			{renderParticipateModal()}
 			{selectedChallenge && (
-				<Dialog visible={true} onHide={onHide}>
+				<Dialog
+					visible={true}
+					onHide={onHide}
+					header="Challenge Details"
+					style={{ width: "50vw", flexDirection: "column", display: "flex" }}
+				>
 					<h2>{selectedChallenge.value.name}</h2>
 					<div style={{ display: "flex", flexDirection: "column" }}>
 						<div>
 							<span>Description: </span>
 							<span>{selectedChallenge.value.description}</span>
 						</div>
-						{selectedChallenge.value.calories !== null && (
+						{selectedChallenge.value.challengeType && (
 							<div>
-								<span>Calories: </span>
-								<span>{selectedChallenge.value.calories}</span>
+								<span>Challenge Type: </span>
+								<span>{selectedChallenge.value.challengeType}</span>
 							</div>
 						)}
-						{selectedChallenge.value.kilometers !== null && (
+						{selectedChallenge.value.challengeGoal && (
 							<div>
-								<span>Kilometers: </span>
-								<span>{selectedChallenge.value.kilometers}</span>
-							</div>
-						)}
-						{selectedChallenge.value.steps !== null && (
-							<div>
-								<span>Steps: </span>
-								<span>{selectedChallenge.value.steps}</span>
+								<span>Challenge Goal: </span>
+								<span>{selectedChallenge.value.challengeGoal}</span>
 							</div>
 						)}
 						<div>

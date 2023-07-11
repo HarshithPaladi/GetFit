@@ -2,23 +2,83 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
+import { ProgressBar } from "primereact/progressbar";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const MyChallenges = () => {
 	const [challenges, setChallenges] = useState([]);
 	const [selectedChallenge, setSelectedChallenge] = useState(null);
+	const [selectedChallengeProgress, setSelectedChallengeProgress] = useState({
+		progressValue: 0,
+		targetValue: 0,
+		progressPercentage: 0,
+	});
 	const [cookies] = useCookies(["jwt"]);
 	axios.defaults.withCredentials = true;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
 
-	const handleViewChallenge = (challenge) => {
+	const handleViewChallenge = async (challenge) => {
 		console.log("Selected challenge: ", challenge);
 		setSelectedChallenge(challenge);
+		try {
+			const response = await axios.get(
+				`https://localhost:7155/api/Challenges/${challenge.value.challengeId}/progress`
+			);
+			const { progressValue, targetValue, progressPercentage } = response.data;
+// set progressValue, targetValue, and progressPercentage in state
+			setSelectedChallengeProgress({
+				progressValue,
+				targetValue,
+				progressPercentage,
+			});
+			console.log("Selected challenge progress: ", selectedChallengeProgress);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
-	const onHide = () => {
-		setSelectedChallenge(null);
+const handleUpdateProgress = async () => {
+	try {
+		const userId = await getUserId();
+		await axios.post(
+			`https://localhost:7155/api/Challenges/${selectedChallenge.value.challengeId}/progress?participantId=${userId}`
+		);
+		console.log("Progress updated successfully!");
+
+		// Fetch the updated progress data
+		const response = await axios.get(
+			`https://localhost:7155/api/Challenges/${selectedChallenge.value.challengeId}/progress`
+		);
+		const { progressValue, targetValue, progressPercentage } = response.data;
+
+		// Update the state with the updated progress
+		setSelectedChallengeProgress({
+			progressValue,
+			targetValue,
+			progressPercentage,
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+
+	const getUserId = async () => {
+		try {
+			const response = await axios.get(
+				"https://localhost:7155/api/auth/userId",
+				{
+					headers: {
+						Authorization: `Bearer ${cookies.jwt}`,
+					},
+				}
+			);
+			const userId = response.data;
+			return userId;
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	useEffect(() => {
@@ -33,7 +93,8 @@ const MyChallenges = () => {
 						const challengeResponse = await axios.get(
 							`https://localhost:7155/api/Challenges/${challengeId}`
 						);
-						return challengeResponse.data;
+						const challenge = challengeResponse.data;
+						return challenge;
 					})
 				);
 				challengeDetails.forEach((challenge) => {
@@ -45,14 +106,14 @@ const MyChallenges = () => {
 					);
 				});
 				setChallenges(challengeDetails);
-				console.log(challengeDetails);
 			} catch (error) {
 				console.log(error);
 			}
 		};
 
 		fetchChallenges();
-	}, []);
+		console.log("Selected challenge progress: ", selectedChallengeProgress);
+	}, [selectedChallengeProgress]);
 
 	return (
 		<>
@@ -73,37 +134,47 @@ const MyChallenges = () => {
 			>
 				<Column field="name" header="Name" sortable />
 				<Column field="description" header="Description" />
-				<Column field="calories" header="Calories" sortable />
-				<Column field="kilometers" header="Kilometers" sortable />
-				<Column field="steps" header="Steps" sortable />
+				<Column field="challengeType" header="Challenge Type" />
+				<Column field="challengeGoal" header="Challenge Goal" />
 				<Column field="startDate" header="Start Date" sortable />
-                <Column field="endDate" header="End Date" sortable />
-                <Column field="createdBy" header="Created By" sortable />
+				<Column field="endDate" header="End Date" sortable />
+				<Column field="createdBy" header="Created By" sortable />
 			</DataTable>
+
 			{selectedChallenge && (
-				<Dialog visible={true} onHide={onHide}>
+				<Dialog
+					visible={true}
+					onHide={() => setSelectedChallenge(null)}
+					header="Challenge Details"
+					style={{ width: "50vw", flexDirection: "column", display: "flex" }}
+				>
 					<h2>{selectedChallenge.value.name}</h2>
 					<div style={{ display: "flex", flexDirection: "column" }}>
 						<div>
 							<span>Description: </span>
 							<span>{selectedChallenge.value.description}</span>
 						</div>
-						{selectedChallenge.value.calories !== null && (
+						{selectedChallenge.value.challengeType && (
 							<div>
-								<span>Calories: </span>
-								<span>{selectedChallenge.value.calories}</span>
+								<span>Challenge Type: </span>
+								<span>{selectedChallenge.value.challengeType}</span>
 							</div>
 						)}
-						{selectedChallenge.value.kilometers !== null && (
+						{selectedChallenge.value.challengeGoal && (
 							<div>
-								<span>Kilometers: </span>
-								<span>{selectedChallenge.value.kilometers}</span>
+								<span>Challenge Goal: </span>
+								<span>{selectedChallenge.value.challengeGoal}</span>
 							</div>
 						)}
-						{selectedChallenge.value.steps !== null && (
+						{selectedChallengeProgress && (
 							<div>
-								<span>Steps: </span>
-								<span>{selectedChallenge.value.steps}</span>
+								<span>Progress: </span>
+								<ProgressBar
+									value={selectedChallengeProgress.progressPercentage}
+									showValue={false}
+								/>
+								<span>ProgressValue: </span>
+								<span>{selectedChallengeProgress.progressValue}/{selectedChallenge.value.challengeGoal}</span>
 							</div>
 						)}
 						<div>
@@ -119,6 +190,8 @@ const MyChallenges = () => {
 							<span>{selectedChallenge.value.createdBy}</span>
 						</div>
 					</div>
+
+					<button onClick={handleUpdateProgress}>Update Progress</button>
 				</Dialog>
 			)}
 		</>

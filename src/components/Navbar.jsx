@@ -12,9 +12,9 @@ const AppNavbar = () => {
 					<Nav.Link href="/register">Register</Nav.Link>
 					<Nav.Link href="/gfit">GFit</Nav.Link>
 					<Nav.Link href="/challenge">Challenges</Nav.Link>
-					<Nav.Link href="/weather">Weather</Nav.Link>
 					<Nav.Link href="/Vitals">Vitals</Nav.Link>
 					<Nav.Link href="/challenge/subscribed">My Challenges</Nav.Link>
+					<Nav.Link href="/logout">Logout</Nav.Link>
 				</Nav>
 			</Navbar.Collapse>
 		</Navbar>
