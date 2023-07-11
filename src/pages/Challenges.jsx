@@ -10,13 +10,25 @@ const Challenges = () => {
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showParticipateModal, setShowParticipateModal] = useState(false);
 	const [selectedChallenge, setSelectedChallenge] = useState(null);
+	const [selectedChallenges, setSelectedChallenges] = useState([]);
 	const [cookies] = useCookies(["jwt"]);
 	axios.defaults.withCredentials = true;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
+
 	const fetchData = async () => {
 		try {
 			const response = await axios.get("https://localhost:7155/api/challenges");
 			setChallenges(response.data);
+		} catch (error) {
+			console.error(error);
+		}
+
+		try {
+			const myChallengesResponse = await axios.get(
+				"https://localhost:7155/api/challenges/my-challenges"
+			);
+			const myChallenges = myChallengesResponse.data;
+			setSelectedChallenges(myChallenges);
 		} catch (error) {
 			console.error(error);
 		}
@@ -26,36 +38,35 @@ const Challenges = () => {
 		fetchData();
 	}, []);
 
-const handleCreateChallenge = async (event) => {
-	event.preventDefault();
+	const handleCreateChallenge = async (event) => {
+		event.preventDefault();
 
-	const form = event.target;
-	const formData = new FormData(form);
+		const form = event.target;
+		const formData = new FormData(form);
 
-	const challenge = {
-		challengeId: "string",
-		name: formData.get("name"),
-		description: formData.get("description"),
-		calories: parseInt(formData.get("calories")) || null,
-		kilometers: parseInt(formData.get("kilometers")) || null,
-		steps: parseInt(formData.get("steps")) || null,
-		startDate: formData.get("startDate"),
-		endDate: formData.get("endDate"),
-		createdBy: "string",
+		const challenge = {
+			challengeId: "string",
+			name: formData.get("name"),
+			description: formData.get("description"),
+			calories: parseInt(formData.get("calories")) || null,
+			kilometers: parseInt(formData.get("kilometers")) || null,
+			steps: parseInt(formData.get("steps")) || null,
+			startDate: formData.get("startDate"),
+			endDate: formData.get("endDate"),
+			createdBy: "string",
+		};
+
+		try {
+			const response = await axios.post(
+				"https://localhost:7155/api/challenges",
+				challenge
+			);
+			setChallenges([...challenges, response.data]);
+			setShowCreateModal(false);
+		} catch (error) {
+			console.error(error);
+		}
 	};
-
-	try {
-		const response = await axios.post(
-			"https://localhost:7155/api/challenges",
-			challenge
-		);
-		setChallenges([...challenges, response.data]);
-		setShowCreateModal(false);
-	} catch (error) {
-		console.error(error);
-	}
-};
-
 
 	const handleParticipateChallenge = async (challengeId) => {
 		try {
@@ -157,7 +168,7 @@ const handleCreateChallenge = async (event) => {
 						/>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="endDate">End Date</label>	
+						<label htmlFor="endDate">End Date</label>
 						<input
 							type="date"
 							id="endDate"
@@ -205,24 +216,30 @@ const handleCreateChallenge = async (event) => {
 	const renderChallengeActions = (rowData) => {
 		const { challengeId } = rowData;
 
-		return (
-			<div className="d-flex">
-				<button
-					className="btn btn-sm btn-primary me-2"
-					onClick={() => handleParticipateChallenge(challengeId)}
-				>
-					Participate
-				</button>
-				<button
-					className="btn btn-sm btn-danger"
-					onClick={() => handleRemoveParticipation(challengeId)}
-				>
-					Remove
-				</button>
-			</div>
-		);
+		if (selectedChallenges.includes(challengeId)) {
+			return (
+				<div className="d-flex">
+					<button
+						className="btn btn-sm btn-danger"
+						onClick={() => handleRemoveParticipant(challengeId)}
+					>
+						Remove
+					</button>
+				</div>
+			);
+		} else {
+			return (
+				<div className="d-flex">
+					<button
+						className="btn btn-sm btn-primary me-2"
+						onClick={() => handleParticipateChallenge(challengeId)}
+					>
+						Participate
+					</button>
+				</div>
+			);
+		}
 	};
-
 
 	const renderChallengeDeleteButton = (rowData) => (
 		<Button
@@ -244,6 +261,7 @@ const handleCreateChallenge = async (event) => {
 				<Column field="calories" header="Calories"></Column>
 				<Column field="kilometers" header="Kilometers"></Column>
 				<Column field="steps" header="Steps"></Column>
+				<Column field="createdBy" header="Created By"></Column>
 				<Column header="Actions" body={renderChallengeActions}></Column>
 				<Column header="Delete" body={renderChallengeDeleteButton}></Column>
 			</DataTable>
