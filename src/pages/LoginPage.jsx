@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import HomePage from "./Homepage";
+import { Dialog } from "primereact/dialog";
 
 const LoginComponent = () => {
 	const {
@@ -14,29 +14,44 @@ const LoginComponent = () => {
 	} = useForm();
 	const navigate = useNavigate();
 	const [cookies, setCookie] = useCookies(["jwt"]);
+	const [showModal, setShowModal] = useState(false);
+	const [message, setMessage] = useState(null);
 	const onSubmit = async (data) => {
-		try {
-			const response = await axios.post(
-				"https://localhost:7155/api/auth/login",
-				data,
-			);
-			const { status, data: responseData } = response;
+  try {
+    const response = await axios.post(
+      'https://localhost:7155/api/auth/login',
+      data
+    );
+	  const { status, data: responseData } = response;
+	  console.log(`Status: ${status}\nResponse: ${JSON.stringify(responseData)}`);
 
-			if (status === 200 && responseData.TwoFactorEnabled) {
-				navigate("/2fa-login");
-			}
-			else {
-				console.log("User is authenticated:");
-				let userName = responseData.userName;
-				localStorage.setItem("userName", userName);
-				setCookie("jwt", responseData.token, { path: "/" }, { httpOnly: true });
-				setCookie("refreshToken", responseData.refreshToken, { path: "/" }, { httpOnly: true });
-			}
-		} catch (error) {
-			// Handle error
-			console.log(error);
-		}
-	};
+    if (status === 200 && responseData.TwoFactorEnabled) {
+      navigate('/2fa-login');
+    } else if (status === 200) {
+      console.log('User is authenticated:');
+      let userName = responseData.userName;
+      localStorage.setItem('userName', userName);
+      setCookie('jwt', responseData.token, { path: '/' }, { httpOnly: true });
+      setCookie(
+        'refreshToken',
+        responseData.refreshToken,
+        { path: '/' },
+        { httpOnly: true }
+      );
+      setMessage('Login successful');
+      setShowModal(true);
+    } else if (status === 400) {
+      console.log('User is not authenticated');
+      setMessage(`Failed to login. Status code: ${status}. Response: ${JSON.stringify(responseData)}`);
+      setShowModal(true);
+    }
+  } catch (error) {
+    // Handle error
+    console.log(error);
+	setMessage("Error: " + error.message+ ".\nPlease check your input and try again.");
+    setShowModal(true);
+  }
+};
 
 	return (
 		<Container>
@@ -72,6 +87,14 @@ const LoginComponent = () => {
 					Login
 				</Button>
 			</Form>
+			<Dialog
+				header="Login"
+				visible={showModal}
+				style={{ width: "90vw" }}
+				onHide={() => setShowModal(false)}
+			>
+				<p>{message}</p>
+			</Dialog>
 		</Container>
 	);
 };

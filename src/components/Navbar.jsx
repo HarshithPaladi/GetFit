@@ -14,6 +14,7 @@ const AppNavbar = () => {
 					<Nav.Link href="/challenge">Challenges</Nav.Link>
 					<Nav.Link href="/weather">Weather</Nav.Link>
 					<Nav.Link href="/Vitals">Vitals</Nav.Link>
+					<Nav.Link href="/challenge/subscribed">My Challenges</Nav.Link>
 				</Nav>
 			</Navbar.Collapse>
 		</Navbar>

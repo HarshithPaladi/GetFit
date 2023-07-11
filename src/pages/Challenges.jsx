@@ -4,6 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { Dialog } from "primereact/dialog";
 
 const Challenges = () => {
 	const [challenges, setChallenges] = useState([]);
@@ -14,6 +15,14 @@ const Challenges = () => {
 	const [cookies] = useCookies(["jwt"]);
 	axios.defaults.withCredentials = true;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
+		const handleViewChallenge = (challenge) => {
+			console.log("Selected challenge: ", challenge);
+			setSelectedChallenge(challenge);
+		};
+
+		const onHide = () => {
+			setSelectedChallenge(null);
+		};
 
 	const fetchData = async () => {
 		try {
@@ -255,18 +264,71 @@ const Challenges = () => {
 			<Button variant="primary" onClick={() => setShowCreateModal(true)}>
 				Create Challenge
 			</Button>
-			<DataTable value={challenges} paginator rows={5}>
-				<Column field="name" header="Name"></Column>
+			<DataTable
+				value={challenges}
+				paginator
+				rows={5}
+				selectionMode="single"
+				onSelectionChange={handleViewChallenge}
+				rowsPerPageOptions={[5, 10, 25]}
+				stripedRows
+				className="p-datatable-gridlines"
+				style={{ display: "flex", flexDirection: "column" }}
+				sortMode="multiple"
+				removableSort
+			>
+				<Column field="name" header="Name" sortable></Column>
 				<Column field="description" header="Description"></Column>
-				<Column field="calories" header="Calories"></Column>
-				<Column field="kilometers" header="Kilometers"></Column>
-				<Column field="steps" header="Steps"></Column>
-				<Column field="createdBy" header="Created By"></Column>
-				<Column header="Actions" body={renderChallengeActions}></Column>
-				<Column header="Delete" body={renderChallengeDeleteButton}></Column>
+				<Column field="calories" header="Calories" sortable></Column>
+				<Column field="kilometers" header="Kilometers" sortable></Column>
+				<Column field="steps" header="Steps" sortable></Column>
+				<Column field="createdBy" header="Created By" sortable></Column>
+				<Column header="Actions" body={renderChallengeActions} sortable></Column>
+				<Column header="Delete" body={renderChallengeDeleteButton} sortable></Column>
 			</DataTable>
 			{renderCreateModal()}
 			{renderParticipateModal()}
+			{selectedChallenge && (
+				<Dialog visible={true} onHide={onHide}>
+					<h2>{selectedChallenge.value.name}</h2>
+					<div style={{ display: "flex", flexDirection: "column" }}>
+						<div>
+							<span>Description: </span>
+							<span>{selectedChallenge.value.description}</span>
+						</div>
+						{selectedChallenge.value.calories !== null && (
+							<div>
+								<span>Calories: </span>
+								<span>{selectedChallenge.value.calories}</span>
+							</div>
+						)}
+						{selectedChallenge.value.kilometers !== null && (
+							<div>
+								<span>Kilometers: </span>
+								<span>{selectedChallenge.value.kilometers}</span>
+							</div>
+						)}
+						{selectedChallenge.value.steps !== null && (
+							<div>
+								<span>Steps: </span>
+								<span>{selectedChallenge.value.steps}</span>
+							</div>
+						)}
+						<div>
+							<span>Start Date: </span>
+							<span>{selectedChallenge.value.startDate}</span>
+						</div>
+						<div>
+							<span>End Date: </span>
+							<span>{selectedChallenge.value.endDate}</span>
+						</div>
+						<div>
+							<span>Created By: </span>
+							<span>{selectedChallenge.value.createdBy}</span>
+						</div>
+					</div>
+				</Dialog>
+			)}
 		</div>
 	);
 };

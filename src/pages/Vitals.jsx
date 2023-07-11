@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Container, Button, Card } from "react-bootstrap";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -8,7 +8,7 @@ const Vitals = () => {
 	const [distance, setDistance] = useState(null);
     const [calories, setCalories] = useState(null);
     const [cookies] = useCookies(["jwt"]);
-
+    
 	const fetchData = async (endpoint) => {
         try {
             axios.defaults.withCredentials = true;
@@ -52,8 +52,12 @@ const Vitals = () => {
 		setSteps(stepsData);
 		setDistance(distanceData);
 		setCalories(caloriesData);
-	};
-
+    };
+    
+    useEffect(() => {
+        handleFetchData();
+    }, []);
+    
 
 	return (
 		<Container>
