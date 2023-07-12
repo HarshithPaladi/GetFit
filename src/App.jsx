@@ -9,6 +9,7 @@ import Challenges from "./pages/Challenges";
 import Vitals from "./pages/Vitals";
 import MyChallenges from "./pages/MyChallenges";
 import Logout from "./pages/Logout";
+import CallbackPage from "./pages/GoogleFitCallbackHandler";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
 				<Route path="/Vitals" element={<Vitals />} />
 				<Route path="/challenge/subscribed" element={<MyChallenges />} />
 				<Route path="/logout" element={<Logout />} />
+				<Route path="/googlefit/callback" element={<CallbackPage />} />
 			</Routes>
 		</Router>
 	);
