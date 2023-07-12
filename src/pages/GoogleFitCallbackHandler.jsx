@@ -15,7 +15,7 @@ const CallbackPage = () => {
 		axios
 			.get("https://getfitapi.harshithpaladi.dev/api/auth/userId")
 			.then((response) => {
-				const userId = response.data.userId;
+				const userId = response.data;
 
 				// Make a GET request to the callback API with the parameters and userId
 				axios
