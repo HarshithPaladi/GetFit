@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import NavBar from "./components/Navbar";
+import AppNavbar from "./components/Navbar";
 import LoginComponent from "./pages/LoginPage";
 import RegisterComponent from "./pages/RegisterPage";
 import HomePage from "./pages/Homepage";
@@ -14,7 +14,7 @@ import Logout from "./pages/Logout";
 function App() {
 	return (
 		<Router>
-			<NavBar />
+			<AppNavbar />
 			<Routes>
 				<Route path="/" element={<HomePage />} />
 				<Route path="/login" element={<LoginComponent />} />
