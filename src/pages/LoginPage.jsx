@@ -34,12 +34,23 @@ const LoginComponent = () => {
 				console.log("User is authenticated:");
 				let userName = responseData.userName;
 				localStorage.setItem("userName", userName);
-				setCookie("jwt", responseData.token, { path: "/" }, { httpOnly: true });
+				setCookie(
+					"jwt",
+					responseData.token,
+					{ path: "/" },
+					{ httpOnly: true },
+					{ secure: true },
+					{ sameSite: "none" },
+					{domain: ".harshithpaladi.dev"}
+				);
 				setCookie(
 					"refreshToken",
 					responseData.refreshToken,
 					{ path: "/" },
-					{ httpOnly: true }
+					{ httpOnly: true },
+					{ secure: true },
+					{ sameSite: "none" },
+					{domain: ".harshithpaladi.dev"}
 				);
 				setMessage("Login successful");
 				setShowModal(true);
