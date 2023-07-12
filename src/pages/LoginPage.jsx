@@ -20,7 +20,7 @@ const LoginComponent = () => {
 	const onSubmit = async (data) => {
 		try {
 			const response = await axios.post(
-				"https://localhost:7155/api/auth/login",
+				"https://getfitapi.harshithpaladi.dev/api/auth/login",
 				data
 			);
 			const { status, data: responseData } = response;

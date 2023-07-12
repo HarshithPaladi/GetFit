@@ -10,15 +10,21 @@ const Logout = () => {
 		const logout = async () => {
 			try {
 				// Make a request to the logout endpoint
-				await axios.post("https://localhost:7155/api/auth/logout", null, {
-					headers: {
-						Authorization: `Bearer ${cookies.jwt}`,
-					},
-					withCredentials: true,
-				});
+				await axios.post(
+					"https://getfitapi.harshithpaladi.dev/api/auth/logout",
+					null,
+					{
+						headers: {
+							Authorization: `Bearer ${cookies.jwt}`,
+						},
+						withCredentials: true,
+					}
+				);
 
 				// Remove the JWT cookie
 				removeCookie("jwt");
+				// Remove the userName from localStorage
+				localStorage.removeItem("userName");
 
 				// Redirect the user to the login page or perform any other necessary actions
 				// Replace the path with the appropriate route for your application

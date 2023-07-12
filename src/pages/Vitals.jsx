@@ -41,13 +41,13 @@ const Vitals = () => {
 		const bucketDurationMillis = now.getTime() - new Date(startTime).getTime();
 
 		const stepsData = await fetchData(
-			`https://localhost:7155/api/googlefit/steps?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
+			`https://getfitapi.harshithpaladi.dev/api/googlefit/steps?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
 		);
 		const distanceData = await fetchData(
-			`https://localhost:7155/api/googlefit/distance?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
+			`https://getfitapi.harshithpaladi.dev/api/googlefit/distance?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
 		);
 		const caloriesData = await fetchData(
-			`https://localhost:7155/api/googlefit/calories?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
+			`https://getfitapi.harshithpaladi.dev/api/googlefit/calories?startTime=${startTime}&endTime=${endTime}&bucketDurationMillis=${bucketDurationMillis}`
 		);
 
 		setSteps(stepsData);

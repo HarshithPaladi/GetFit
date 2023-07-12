@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
-import {Dialog} from "primereact/dialog"
+import { Dialog } from "primereact/dialog";
 
 const RegisterPage = () => {
 	const [formData, setFormData] = useState({
@@ -11,8 +11,8 @@ const RegisterPage = () => {
 		email: "",
 		password: "",
 	});
-    const [error, setError] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+	const [error, setError] = useState(null);
+	const [showModal, setShowModal] = useState(false);
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,18 +22,16 @@ const RegisterPage = () => {
 		e.preventDefault();
 		try {
 			const response = await axios.post(
-				"https://localhost:7155/api/auth/register",
+				"https://getfitapi.harshithpaladi.dev/api/auth/register",
 				formData
-            );
-            const { status, data: responseData } = response;
-            if (status === 200) {
-                setShowModal(true);
-            }
-            else {
-                setError("Failed to register. Please check your input and try again.");
-            }
-        }
-        catch (error) {
+			);
+			const { status, data: responseData } = response;
+			if (status === 200) {
+				setShowModal(true);
+			} else {
+				setError("Failed to register. Please check your input and try again.");
+			}
+		} catch (error) {
 			setError("Failed to register. Please check your input and try again.");
 		}
 	};
@@ -107,15 +105,14 @@ const RegisterPage = () => {
 					Register
 				</Button>
 			</Form>
-            <Dialog
+			<Dialog
 				header="Login"
 				visible={showModal}
 				style={{ width: "90vw" }}
 				onHide={() => setShowModal(false)}
-            >
-                <p>Registration successful</p>
-            </Dialog>
-
+			>
+				<p>Registration successful</p>
+			</Dialog>
 		</Container>
 	);
 };

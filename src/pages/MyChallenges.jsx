@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaSync } from "react-icons/fa";
 import { DataTable } from "primereact/datatable";
-import { Spinner,Button } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { ProgressBar } from "primereact/progressbar";
@@ -26,10 +26,10 @@ const MyChallenges = () => {
 		setSelectedChallenge(challenge);
 		try {
 			const response = await axios.get(
-				`https://localhost:7155/api/Challenges/${challenge.value.challengeId}/progress`
+				`https://getfitapi.harshithpaladi.dev/api/Challenges/${challenge.value.challengeId}/progress`
 			);
 			const { progressValue, targetValue, progressPercentage } = response.data;
-// set progressValue, targetValue, and progressPercentage in state
+			// set progressValue, targetValue, and progressPercentage in state
 			setSelectedChallengeProgress({
 				progressValue,
 				targetValue,
@@ -41,39 +41,38 @@ const MyChallenges = () => {
 		}
 	};
 
-const handleUpdateProgress = async () => {
-	try {
-		const userId = await getUserId();
-		await axios.post(
-			`https://localhost:7155/api/Challenges/${selectedChallenge.value.challengeId}/progress?participantId=${userId}`
-		);
-		console.log("Progress updated successfully!");
+	const handleUpdateProgress = async () => {
+		try {
+			const userId = await getUserId();
+			await axios.post(
+				`https://getfitapi.harshithpaladi.dev/api/Challenges/${selectedChallenge.value.challengeId}/progress?participantId=${userId}`
+			);
+			console.log("Progress updated successfully!");
 
-		// Fetch the updated progress data
-		const response = await axios.get(
-			`https://localhost:7155/api/Challenges/${selectedChallenge.value.challengeId}/progress`
-		);
-		const { progressValue, targetValue, progressPercentage } = response.data;
+			// Fetch the updated progress data
+			const response = await axios.get(
+				`https://getfitapi.harshithpaladi.dev/api/Challenges/${selectedChallenge.value.challengeId}/progress`
+			);
+			const { progressValue, targetValue, progressPercentage } = response.data;
 
-		// Update the state with the updated progress
-		setSelectedChallengeProgress({
-			progressValue,
-			targetValue,
-			progressPercentage,
-		});
-	} catch (error) {
-		console.error(error);
-	}
-};
-const handleRefreshData = () => {
-	fetchChallenges();
-};
-
+			// Update the state with the updated progress
+			setSelectedChallengeProgress({
+				progressValue,
+				targetValue,
+				progressPercentage,
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	const handleRefreshData = () => {
+		fetchChallenges();
+	};
 
 	const getUserId = async () => {
 		try {
 			const response = await axios.get(
-				"https://localhost:7155/api/auth/userId",
+				"https://getfitapi.harshithpaladi.dev/api/auth/userId",
 				{
 					headers: {
 						Authorization: `Bearer ${cookies.jwt}`,
@@ -86,47 +85,44 @@ const handleRefreshData = () => {
 			console.error(error);
 		}
 	};
-const fetchChallenges = async () => {
-	try {
-		setIsLoading(true);
-		const response = await axios.get(
-			"https://localhost:7155/api/Challenges/my-challenges"
-		);
-		const challengeIds = response.data;
-		const challengeDetails = await Promise.all(
-			challengeIds.map(async (challengeId) => {
-				const challengeResponse = await axios.get(
-					`https://localhost:7155/api/Challenges/${challengeId}`
+	const fetchChallenges = async () => {
+		try {
+			setIsLoading(true);
+			const response = await axios.get(
+				"https://getfitapi.harshithpaladi.dev/api/Challenges/my-challenges"
+			);
+			const challengeIds = response.data;
+			const challengeDetails = await Promise.all(
+				challengeIds.map(async (challengeId) => {
+					const challengeResponse = await axios.get(
+						`https://getfitapi.harshithpaladi.dev/api/Challenges/${challengeId}`
+					);
+					const challenge = challengeResponse.data;
+					return challenge;
+				})
+			);
+			challengeDetails.forEach((challenge) => {
+				challenge.startDate = new Date(challenge.startDate).toDateString(
+					"yyyy-MM-dd"
 				);
-				const challenge = challengeResponse.data;
-				return challenge;
-			})
-		);
-		challengeDetails.forEach((challenge) => {
-			challenge.startDate = new Date(challenge.startDate).toDateString(
-				"yyyy-MM-dd"
-			);
-			challenge.endDate = new Date(challenge.endDate).toDateString(
-				"yyyy-MM-dd"
-			);
-		});
-		setChallenges(challengeDetails);
-	} catch (error) {
-		console.log(error);
-	} finally {
-		setIsLoading(false);
-	}
-};
+				challenge.endDate = new Date(challenge.endDate).toDateString(
+					"yyyy-MM-dd"
+				);
+			});
+			setChallenges(challengeDetails);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 	useEffect(() => {
-		
-
 		fetchChallenges();
 		console.log("Selected challenge progress: ", selectedChallengeProgress);
 	}, [selectedChallengeProgress]);
 
 	return (
 		<>
-			
 			<Button variant="light" onClick={handleRefreshData} disabled={isLoading}>
 				{isLoading ? (
 					<Spinner animation="border" size="sm" />

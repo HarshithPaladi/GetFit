@@ -11,7 +11,7 @@ const Gfit = () => {
 		const getAuthorizationUrl = async () => {
 			try {
 				const response = await axios.get(
-					"https://localhost:7155/oauth/authorize",
+					"https://getfitapi.harshithpaladi.dev/oauth/authorize",
 					{
 						headers: {
 							Authorization: `Bearer ${cookies.jwt}`,
@@ -35,7 +35,7 @@ const Gfit = () => {
 				<a href={authorizationUrl} target="_blank">
 					Connect with Google Fit
 				</a>
-				</Button>
+			</Button>
 		</Container>
 	);
 };

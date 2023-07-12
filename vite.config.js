@@ -6,5 +6,6 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 // TODO: Remove basicSsl plugin when deploying to production
 export default defineConfig({
   plugins: [react(),
-  basicSsl()],
+    // basicSsl()
+  ],
 })

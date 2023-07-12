@@ -4,12 +4,13 @@ import { Card } from "primereact/card";
 import { Link } from "react-router-dom";
 
 const HomePage = ({ username }) => {
-  const name = username ? username : "Guest";
+  // get username from localstorage, if it is null, set the name to "Guest"
+	  const name = localStorage.getItem("userName") || "Guest";
 
   return (
     <div className="home-container">
       <section className="hero-section">
-        <img
+        {/* <img
           src="src\assets\background.webp"
           alt=""
           style={{
@@ -19,9 +20,9 @@ const HomePage = ({ username }) => {
             top: "0",
             filter: "brightness(0.5)",
           }}
-        />
+        /> */}
         <div className="hero-content">
-          <h1 className="tagline">Hi {name}</h1>
+          <h1 className="tagline">Hi {name}!!</h1>
           <h1 className="tagline">Welcome to GetFit</h1>
           <p className="tagline-description">
             Achieve your fitness goals with exciting challenges and data-driven

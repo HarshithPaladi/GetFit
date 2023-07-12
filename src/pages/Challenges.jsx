@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSync } from "react-icons/fa";
-import { Card, Button, Modal, Form,Spinner } from "react-bootstrap";
+import { Card, Button, Modal, Form, Spinner } from "react-bootstrap";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
@@ -30,7 +30,9 @@ const Challenges = () => {
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axios.get("https://localhost:7155/api/challenges");
+			const response = await axios.get(
+				"https://getfitapi.harshithpaladi.dev/api/challenges"
+			);
 			setChallenges(response.data);
 		} catch (error) {
 			console.error(error);
@@ -40,7 +42,7 @@ const Challenges = () => {
 
 		try {
 			const myChallengesResponse = await axios.get(
-				"https://localhost:7155/api/challenges/my-challenges"
+				"https://getfitapi.harshithpaladi.dev/api/challenges/my-challenges"
 			);
 			const myChallenges = myChallengesResponse.data;
 			setSelectedChallenges(myChallenges);
@@ -51,8 +53,6 @@ const Challenges = () => {
 	const handleRefreshData = () => {
 		fetchData();
 	};
-
-
 
 	useEffect(() => {
 		fetchData();
@@ -77,7 +77,7 @@ const Challenges = () => {
 
 		try {
 			const response = await axios.post(
-				"https://localhost:7155/api/challenges",
+				"https://getfitapi.harshithpaladi.dev/api/challenges",
 				challenge
 			);
 			setChallenges([...challenges, response.data]);
@@ -90,7 +90,7 @@ const Challenges = () => {
 	const handleParticipateChallenge = async (challengeId) => {
 		try {
 			await axios.post(
-				`https://localhost:7155/api/challenges/${challengeId}/participants`
+				`https://getfitapi.harshithpaladi.dev/api/challenges/${challengeId}/participants`
 			);
 			fetchData();
 		} catch (error) {
@@ -101,7 +101,7 @@ const Challenges = () => {
 	const handleRemoveParticipant = async (challengeId) => {
 		try {
 			await axios.delete(
-				`https://localhost:7155/api/challenges/${challengeId}/participants`
+				`https://getfitapi.harshithpaladi.dev/api/challenges/${challengeId}/participants`
 			);
 			fetchData();
 		} catch (error) {
@@ -112,7 +112,7 @@ const Challenges = () => {
 	const handleDeleteChallenge = async (challengeId) => {
 		try {
 			await axios.delete(
-				`https://localhost:7155/api/challenges/${challengeId}`
+				`https://getfitapi.harshithpaladi.dev/api/challenges/${challengeId}`
 			);
 			setChallenges(
 				challenges.filter((challenge) => challenge.challengeId !== challengeId)
@@ -163,7 +163,9 @@ const Challenges = () => {
 						</select>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="challengeGoal">Challenge Goal(steps,calories,meters)</label>
+						<label htmlFor="challengeGoal">
+							Challenge Goal(steps,calories,meters)
+						</label>
 						<input
 							type="number"
 							id="challengeGoal"
@@ -277,6 +279,10 @@ const Challenges = () => {
 			<Button variant="primary" onClick={() => setShowCreateModal(true)}>
 				Create Challenge
 			</Button>
+
+			{/* <Button variant="primary" onClick={() => history.push("/challenge/subscribed")}>
+				My Challenges
+			</Button> */}
 			<Button variant="light" onClick={handleRefreshData} disabled={isLoading}>
 				{isLoading ? (
 					<Spinner animation="border" size="sm" />
