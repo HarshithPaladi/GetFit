@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const CallbackPage = () => {
+    const [cookies] = useCookies(["jwt"]);
 	useEffect(() => {
 		// Get the query parameters from the URL
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get("code");
 		const scope = urlParams.get("scope");
-
+        axios.defaults.withCredentials = true;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
 		// Make a GET request to the backend API to get the userId
 		axios
 			.get("https://getfitapi.harshithpaladi.dev/api/auth/userId")
