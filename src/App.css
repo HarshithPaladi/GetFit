@@ -7,7 +7,8 @@
   font-family: var(--font-family);
 }
 body{
-background-color: #333333;
+color: #d9d9d9;
+  background-color: #1d1d1d;
 }
 .logo {
   height: 6em;
@@ -53,7 +54,8 @@ background-color: #333333;
 }
 
 .home-container {
-  background-color: #333333;
+color: #d9d9d9;
+  background-color: #1d1d1d;
 }
 
 .tagline {
