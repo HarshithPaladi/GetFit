@@ -5,13 +5,16 @@
   height: 100vh;
   color: white;
   font-family: var(--font-family);
+
 }
 
 body {
   color: #d9d9d9;
-  background-color: #1d1d1d;
+  /* background-color: #1d1d1d; */
+    background-image: url(/src/assets/opoy7_nospace.jpg);
+      background-size: cover;
+      background-repeat: repeat;
 }
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -60,7 +63,7 @@ body {
 
 .home-container {
   color: #d9d9d9;
-  background-color: #1d1d1d;
+  /* background-color: #1d1d1d; */
 }
 
 .tagline {
@@ -103,7 +106,7 @@ body {
 }
 
 .cta-section {
-  background-color: #18191d;
+  /* background-color: #18191d; */
   margin-top: 40px;
   padding-top: 40px;
   padding-bottom: 40px;
