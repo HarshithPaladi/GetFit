@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Card } from "primereact/card";
+import { Button } from "primereact/button";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
@@ -28,15 +29,26 @@ const Gfit = () => {
 
 		getAuthorizationUrl();
 	}, []); // Empty dependency array to run the effect only once
+
 	return (
-		<Container>
-			<h1>Google Fit Integration</h1>
-			<Button variant="primary">
-				<a href={authorizationUrl} target="_blank">
-					Connect with Google Fit
-				</a>
-			</Button>
-		</Container>
+		<div
+			className="p-d-flex p-ai-center p-jc-center"
+			style={{ height: "100vh", display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}
+		>
+			<Card
+				title="Google Fit Integration"
+				style={{ width: "350px", textAlign: "center" }}
+			>
+				<Button
+					variant="primary"
+					label="Connect with Google Fit"
+					icon="pi pi-google"
+					disabled={!authorizationUrl}
+					href={authorizationUrl}
+					target="_blank"
+				/>
+			</Card>
+		</div>
 	);
 };
 

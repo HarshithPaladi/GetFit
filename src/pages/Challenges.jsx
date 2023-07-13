@@ -303,6 +303,7 @@ const Challenges = () => {
 				style={{ display: "flex", flexDirection: "column" }}
 				sortMode="multiple"
 				removableSort
+
 			>
 				<Column field="name" header="Name" sortable></Column>
 				<Column field="description" header="Description"></Column>

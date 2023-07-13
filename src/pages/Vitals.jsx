@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Card } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 import axios from "axios";
+import { FaSync } from "react-icons/fa";
+import { Button } from "primereact/button";
 import { useCookies } from "react-cookie";
+import "./Vitals.css"; // Import the CSS file for custom styles
 
 const Vitals = () => {
 	const [steps, setSteps] = useState(null);
 	const [distance, setDistance] = useState(null);
 	const [calories, setCalories] = useState(null);
 	const [cookies] = useCookies(["jwt"]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const fetchData = async (endpoint) => {
 		try {
+			setIsLoading(true);
 			axios.defaults.withCredentials = true;
 			axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
 			const response = await axios.post(endpoint, {
@@ -22,6 +27,8 @@ const Vitals = () => {
 			return response.data;
 		} catch (error) {
 			console.error(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -61,29 +68,45 @@ const Vitals = () => {
 
 	return (
 		<Container>
-			<h1>Vitals</h1>
-			<Button variant="primary" onClick={handleFetchData}>
-				Fetch Data
-			</Button>
+			<h1>Activity</h1>
+			<Button
+				label="Refresh"
+				icon="pi pi-refresh"
+				loading={isLoading}
+				onClick={handleFetchData}
+				iconPos="right"
+				rounded
+				className="p-button-raised p-button-rounded"
+			/>
 
 			<Card>
 				<Card.Body>
-					<Card.Title>Steps</Card.Title>
-					<Card.Text>{steps ?? "No data"}</Card.Text>
+					<div className="vital">
+						<div className="vital-value">{steps ?? "No data"}</div>
+						<div className="vital-label">Steps</div>
+					</div>
 				</Card.Body>
 			</Card>
 
 			<Card>
 				<Card.Body>
-					<Card.Title>Distance</Card.Title>
-					<Card.Text>{distance ?? "No data"}</Card.Text>
+					<div className="vital">
+						<div className="vital-value">
+							{distance ? `${distance} meters` : "No data"}
+						</div>
+						<div className="vital-label">Distance</div>
+					</div>
 				</Card.Body>
 			</Card>
 
 			<Card>
 				<Card.Body>
-					<Card.Title>Calories</Card.Title>
-					<Card.Text>{calories ?? "No data"}</Card.Text>
+					<div className="vital">
+						<div className="vital-value">
+							{calories ? `${calories} Cal` : "No data"}
+						</div>
+						<div className="vital-label">Calories</div>
+					</div>
 				</Card.Body>
 			</Card>
 		</Container>

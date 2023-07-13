@@ -1,0 +1,18 @@
+.vital {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vital-value {
+    font-size: 3rem;
+    margin-right: 0.75rem;
+    align-self: baseline;
+
+}
+
+.vital-label {
+    font-size: 1rem;
+    color: #666666;
+    align-self: baseline;
+}

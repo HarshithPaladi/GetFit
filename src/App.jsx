@@ -10,6 +10,7 @@ import Vitals from "./pages/Vitals";
 import MyChallenges from "./pages/MyChallenges";
 import Logout from "./pages/Logout";
 import CallbackPage from "./pages/GoogleFitCallbackHandler";
+import "./App.css";
 
 
 function App() {

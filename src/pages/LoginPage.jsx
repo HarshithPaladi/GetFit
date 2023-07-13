@@ -41,7 +41,7 @@ const LoginComponent = () => {
 					{ httpOnly: true },
 					{ secure: true },
 					{ sameSite: "none" },
-					{domain: ".harshithpaladi.dev"}
+					{ domain: ".harshithpaladi.dev" }
 				);
 				setCookie(
 					"refreshToken",
@@ -50,7 +50,7 @@ const LoginComponent = () => {
 					{ httpOnly: true },
 					{ secure: true },
 					{ sameSite: "none" },
-					{domain: ".harshithpaladi.dev"}
+					{ domain: ".harshithpaladi.dev" }
 				);
 				setMessage("Login successful");
 				setShowModal(true);
