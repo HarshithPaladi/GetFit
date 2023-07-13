@@ -3,7 +3,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Dialog } from "primereact/dialog";
 import { ProgressBar } from "primereact/progressbar";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 const CallbackPage = () => {
 	const [cookies] = useCookies(["jwt"]);
@@ -60,8 +60,8 @@ const CallbackPage = () => {
 	const onHideDialog = () => {
 		// Close the dialog
 		setShowDialog(false);
-		// Close the window after the dialog is closed
-		window.close();
+		// // Close the window after the dialog is closed
+		// window.close();
 	};
 
 	return (
@@ -76,14 +76,14 @@ const CallbackPage = () => {
 				modal
 				draggable={false}
 				resizable={false}
-				closable={false}
+				closable={true}
 				style={{ width: "300px", textAlign: "center" }}
 			>
 				<div>
 					{success ? (
 						<FaCheck size={40} style={{ color: "green" }} />
 					) : (
-						<ProgressBar mode="indeterminate" style={{ height: "6px" }} />
+						<FaExclamationTriangle size={40} style={{ color: "red" }} />
 					)}
 				</div>
 				<div style={{ marginTop: "10px" }}>
