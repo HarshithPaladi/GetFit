@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FaSync } from "react-icons/fa";
 import { DataTable } from "primereact/datatable";
-import { Spinner, Button } from "react-bootstrap";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { ProgressBar } from "primereact/progressbar";
+import { Button } from "primereact/button";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const MyChallenges = () => {
 	const [challenges, setChallenges] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isProgressLoading, setIsProgressLoading] = useState(false);
 	const [selectedChallenge, setSelectedChallenge] = useState(null);
 	const [selectedChallengeProgress, setSelectedChallengeProgress] = useState({
 		progressValue: 0,
@@ -43,6 +44,7 @@ const MyChallenges = () => {
 
 	const handleUpdateProgress = async () => {
 		try {
+			setIsProgressLoading(true);
 			const userId = await getUserId();
 			await axios.post(
 				`https://getfitapi.harshithpaladi.dev/api/Challenges/${selectedChallenge.value.challengeId}/progress?participantId=${userId}`
@@ -61,6 +63,7 @@ const MyChallenges = () => {
 				targetValue,
 				progressPercentage,
 			});
+			setIsProgressLoading(false);
 		} catch (error) {
 			console.error(error);
 		}
@@ -118,19 +121,18 @@ const MyChallenges = () => {
 	};
 	useEffect(() => {
 		fetchChallenges();
-		handleUpdateProgress();
 		console.log("Selected challenge progress: ", selectedChallengeProgress);
 	}, [selectedChallengeProgress]);
 
 	return (
 		<>
-			<Button variant="light" onClick={handleRefreshData} disabled={isLoading}>
-				{isLoading ? (
-					<Spinner animation="border" size="sm" />
-				) : (
-					<FaSync style={{ verticalAlign: "middle" }} />
-				)}
-			</Button>
+			<Button
+				label="Refresh"
+				icon="pi pi-refresh"
+				loading={isLoading}
+				onClick={handleRefreshData}
+				iconPos="right"
+			/>
 			<DataTable
 				value={challenges}
 				selectionMode="single"
@@ -206,7 +208,13 @@ const MyChallenges = () => {
 						</div>
 					</div>
 
-					<button onClick={handleUpdateProgress}>Update Progress</button>
+					<Button
+						label="Update Progress"
+						icon="pi pi-refresh"
+						onClick={handleUpdateProgress}
+						iconPos="right"
+						loading={isProgressLoading}
+					/>
 				</Dialog>
 			)}
 		</>

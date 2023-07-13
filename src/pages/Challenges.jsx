@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaSync } from "react-icons/fa";
-import { Card, Button, Modal, Form, Spinner } from "react-bootstrap";
+import { Card, Modal, Form, Spinner } from "react-bootstrap";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Button } from "primereact/button";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Dialog } from "primereact/dialog";
@@ -298,13 +299,13 @@ const Challenges = () => {
 			{/* <Button variant="primary" onClick={() => history.push("/challenge/subscribed")}>
 				My Challenges
 			</Button> */}
-			<Button variant="light" onClick={handleRefreshData} disabled={isLoading}>
-				{isLoading ? (
-					<Spinner animation="border" size="sm" />
-				) : (
-					<FaSync style={{ verticalAlign: "middle" }} />
-				)}
-			</Button>
+			<Button
+				label="Refresh"
+				icon="pi pi-refresh"
+				loading={isloading}
+				onClick={handleRefreshData}
+				iconPos="right"
+			/>
 
 			<DataTable
 				value={challenges}
