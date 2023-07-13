@@ -37,7 +37,6 @@ const MyChallenges = () => {
 				progressPercentage,
 			});
 			console.log("Selected challenge progress: ", selectedChallengeProgress);
-			await handleUpdateProgress();
 		} catch (error) {
 			console.error(error);
 		}
