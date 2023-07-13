@@ -6,19 +6,23 @@
   color: white;
   font-family: var(--font-family);
 }
-body{
-color: #d9d9d9;
+
+body {
+  color: #d9d9d9;
   background-color: #1d1d1d;
 }
+
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -27,6 +31,7 @@ color: #d9d9d9;
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -54,7 +59,7 @@ color: #d9d9d9;
 }
 
 .home-container {
-color: #d9d9d9;
+  color: #d9d9d9;
   background-color: #1d1d1d;
 }
 
@@ -86,7 +91,8 @@ color: #d9d9d9;
   border-radius: 0;
   color: whitesmoke;
 }
-.row{
+
+.row {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -95,6 +101,7 @@ color: #d9d9d9;
   margin: 1rem;
   border: 0.5rem;
 }
+
 .cta-section {
   background-color: #18191d;
   margin-top: 40px;
@@ -116,7 +123,7 @@ color: #d9d9d9;
   color: #888;
 }
 
-.p-card .p-card-body{
+.p-card .p-card-body {
   background-color: #444444;
   border: none;
   margin: 10px;
@@ -125,6 +132,7 @@ color: #d9d9d9;
   border-radius: 0;
   color: whitesmoke;
 }
+
 .p-datatable {
   background-color: #333333;
   margin-top: 1rem;
@@ -138,15 +146,18 @@ color: #d9d9d9;
 .p-datatable .p-datatable-tbody tr:hover {
   background-color: #555555;
 }
+
 .p-datatable .p-datatable-header {
   background-color: #333333;
   color: #ffffff;
 }
-.p-button-label{
+
+.p-button-label {
   color: whitesmoke;
   font-size: 1rem;
 
 }
+
 .p-paginator {
   background-color: #333333;
 }

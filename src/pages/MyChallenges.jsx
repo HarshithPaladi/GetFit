@@ -137,7 +137,6 @@ const MyChallenges = () => {
 				paginator
 				rows={5}
 				rowsPerPageOptions={[5, 10, 25]}
-				stripedRows
 				className="p-datatable-gridlines"
 				style={{ display: "flex", flexDirection: "column" }}
 				sortMode="multiple"

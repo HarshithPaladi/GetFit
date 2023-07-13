@@ -6,6 +6,7 @@ import { Column } from "primereact/column";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Dialog } from "primereact/dialog";
+import "../assets/css/Challenges.css";
 
 const Challenges = () => {
 	const [challenges, setChallenges] = useState([]);
@@ -123,14 +124,20 @@ const Challenges = () => {
 	};
 
 	const renderCreateModal = () => (
-		<Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
+		<Modal
+			show={showCreateModal}
+			onHide={() => setShowCreateModal(false)}
+			className="create-modal"
+		>
 			<Modal.Header closeButton>
-				<Modal.Title>Create Challenge</Modal.Title>
+				<Modal.Title className="modal-title">Create Challenge</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<form onSubmit={handleCreateChallenge}>
 					<div className="mb-3">
-						<label htmlFor="name">Name</label>
+						<label className="form-label" htmlFor="name">
+							Name
+						</label>
 						<input
 							type="text"
 							id="name"
@@ -140,7 +147,9 @@ const Challenges = () => {
 						/>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="description">Description</label>
+						<label className="form-label" htmlFor="description">
+							Description
+						</label>
 						<input
 							type="text"
 							id="description"
@@ -150,7 +159,9 @@ const Challenges = () => {
 						/>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="challengeType">Challenge Type</label>
+						<label className="form-label" htmlFor="challengeType">
+							Challenge Type
+						</label>
 						<select
 							id="challengeType"
 							name="challengeType"
@@ -163,7 +174,7 @@ const Challenges = () => {
 						</select>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="challengeGoal">
+						<label className="form-label" htmlFor="challengeGoal">
 							Challenge Goal(steps,calories,meters)
 						</label>
 						<input
@@ -175,7 +186,9 @@ const Challenges = () => {
 						/>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="startDate">Start Date</label>
+						<label className="form-label" htmlFor="startDate">
+							Start Date
+						</label>
 						<input
 							type="date"
 							id="startDate"
@@ -185,7 +198,9 @@ const Challenges = () => {
 						/>
 					</div>
 					<div className="mb-3">
-						<label htmlFor="endDate">End Date</label>
+						<label className="form-label" htmlFor="endDate">
+							End Date
+						</label>
 						<input
 							type="date"
 							id="endDate"
@@ -298,12 +313,10 @@ const Challenges = () => {
 				selectionMode="single"
 				onSelectionChange={handleViewChallenge}
 				rowsPerPageOptions={[5, 10, 25]}
-				stripedRows
 				className="p-datatable-gridlines"
 				style={{ display: "flex", flexDirection: "column" }}
 				sortMode="multiple"
 				removableSort
-
 			>
 				<Column field="name" header="Name" sortable></Column>
 				<Column field="description" header="Description"></Column>

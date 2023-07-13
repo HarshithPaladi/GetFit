@@ -33,7 +33,13 @@ const Gfit = () => {
 	return (
 		<div
 			className="p-d-flex p-ai-center p-jc-center"
-			style={{ height: "100vh", display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}
+			style={{
+				height: "100vh",
+				display: "flex",
+				flexWrap: "wrap",
+				justifyContent: "center",
+				alignItems: "center",
+			}}
 		>
 			<Card
 				title="Google Fit Integration"

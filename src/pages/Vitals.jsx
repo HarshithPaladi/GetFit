@@ -4,7 +4,7 @@ import axios from "axios";
 import { FaSync } from "react-icons/fa";
 import { Button } from "primereact/button";
 import { useCookies } from "react-cookie";
-import "./Vitals.css"; // Import the CSS file for custom styles
+import "../assets/css/Vitals.css";
 
 const Vitals = () => {
 	const [steps, setSteps] = useState(null);
