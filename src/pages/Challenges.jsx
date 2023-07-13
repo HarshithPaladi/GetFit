@@ -302,7 +302,7 @@ const Challenges = () => {
 			<Button
 				label="Refresh"
 				icon="pi pi-refresh"
-				loading={isloading}
+				loading={isLoading}
 				onClick={handleRefreshData}
 				iconPos="right"
 			/>
