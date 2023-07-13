@@ -140,7 +140,11 @@ background-color: #333333;
   background-color: #333333;
   color: #ffffff;
 }
+.p-button-label{
+  color: whitesmoke;
+  font-size: 1rem;
 
+}
 .p-paginator {
   background-color: #333333;
 }
