@@ -44,8 +44,10 @@ const Gfit = () => {
 					label="Connect with Google Fit"
 					icon="pi pi-google"
 					disabled={!authorizationUrl}
-					target="_blank"
 					link
+					onClick={() => {
+						window.location.href = authorizationUrl;
+					}}
 				/>
 			</Card>
 		</div>
