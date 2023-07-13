@@ -118,6 +118,7 @@ const MyChallenges = () => {
 	};
 	useEffect(() => {
 		fetchChallenges();
+		handleUpdateProgress();
 		console.log("Selected challenge progress: ", selectedChallengeProgress);
 	}, [selectedChallengeProgress]);
 
