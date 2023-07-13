@@ -81,7 +81,7 @@ const LoginComponent = () => {
 	};
 
 	return (
-		<Container>
+		<Container className="form-react">
 			<h1>Login</h1>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Form.Group controlId="username">
@@ -89,6 +89,7 @@ const LoginComponent = () => {
 					<Form.Control
 						type="text"
 						{...register("username", { required: true })}
+						className="form-control-react"
 					/>
 					{errors.username && (
 						<Alert variant="danger">Username is required</Alert>
@@ -100,6 +101,7 @@ const LoginComponent = () => {
 					<Form.Control
 						type="password"
 						{...register("password", { required: true })}
+						className="form-control-react"
 					/>
 					{errors.password && (
 						<Alert variant="danger">Password is required</Alert>

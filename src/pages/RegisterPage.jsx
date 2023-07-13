@@ -40,7 +40,7 @@ const RegisterPage = () => {
 		<Container>
 			<h1>Register</h1>
 			{error && <Alert variant="danger">{error}</Alert>}
-			<Form onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit} className="form-react">
 				<Form.Group controlId="userName">
 					<Form.Label>Username</Form.Label>
 					<Form.Control
@@ -72,10 +72,10 @@ const RegisterPage = () => {
 						onChange={handleChange}
 						required
 					>
-						<option value="">Select</option>
-						<option value="Male">Male</option>
-						<option value="Female">Female</option>
-						<option value="Other">Other</option>
+						<option style={{width:"250px"}} value="">Select</option>
+						<option style={{width:"250px"}} value="Male">Male</option>
+						<option style={{width:"250px"}} value="Female">Female</option>
+						<option style={{width:"250px"}} value="Other">Other</option>
 					</Form.Control>
 				</Form.Group>
 

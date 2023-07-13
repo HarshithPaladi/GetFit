@@ -281,6 +281,7 @@ const Challenges = () => {
 				<Button
 					variant="danger"
 					onClick={() => handleDeleteChallenge(rowData.challengeId)}
+					severity="danger"
 				>
 					Delete
 				</Button>
@@ -292,7 +293,9 @@ const Challenges = () => {
 
 	return (
 		<div>
-			<Button variant="primary" onClick={() => setShowCreateModal(true)}>
+			<Button variant="primary" onClick={() => setShowCreateModal(true)}
+				style={{ marginRight: "2rem", marginTop: "1rem" }}
+			>
 				Create Challenge
 			</Button>
 

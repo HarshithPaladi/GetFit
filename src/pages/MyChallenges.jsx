@@ -133,6 +133,7 @@ const MyChallenges = () => {
 				loading={isLoading}
 				onClick={handleRefreshData}
 				iconPos="right"
+				style={{ marginTop: "1rem" }}
 			/>
 			<DataTable
 				value={challenges}

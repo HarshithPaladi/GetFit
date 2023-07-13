@@ -144,7 +144,7 @@ body {
 }
 
 .p-datatable .p-datatable-tbody tr:hover {
-  background-color: #555555;
+  background-color: #3e3e3e;
 }
 
 .p-datatable .p-datatable-header {
@@ -160,4 +160,18 @@ body {
 
 .p-paginator {
   background-color: #333333;
+}
+.form-control{
+  width:250px;
+}
+.form-react {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+.form-control-react{
+  width:250px;
 }
