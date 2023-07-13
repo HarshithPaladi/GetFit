@@ -92,7 +92,7 @@ const Vitals = () => {
 				<Card.Body>
 					<div className="vital">
 						<div className="vital-value">
-							{distance ? `${distance} meters` : "No data"}
+							{distance ? `${distance} M` : "No data"}
 						</div>
 						<div className="vital-label">Distance</div>
 					</div>
