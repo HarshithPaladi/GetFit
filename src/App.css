@@ -142,7 +142,10 @@ body {
   background-color: #444444;
   color: #ffffff;
 }
-
+.p-datatable.p-datatable-selectable .p-datatable-tbody>tr.p-selectable-row:not(.p-highlight):not(.p-datatable-emptymessage):hover {
+  background-color: #3e3e3e;
+  color: #ffffff;
+}
 .p-datatable .p-datatable-tbody tr:hover {
   background-color: #3e3e3e;
 }
