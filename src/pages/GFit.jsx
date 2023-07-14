@@ -12,7 +12,7 @@ const Gfit = () => {
 		try {
 			// Make a request to the revoke endpoint
 			await axios.post(
-				"https://getfitapi.harshithpaladi.dev/api/auth/gfit/disconnect",
+				"https://getfitapi.harshithpaladi.dev/oauth/disconnect",
 				null,
 				{
 					headers: {
