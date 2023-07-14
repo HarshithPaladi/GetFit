@@ -161,7 +161,7 @@ const MyChallenges = () => {
 					visible={true}
 					onHide={() => setSelectedChallenge(null)}
 					header="Challenge Details"
-					style={{ width: "50vw", flexDirection: "column", display: "flex" }}
+					style={{ width: "80vw", flexDirection: "column", display: "flex" }}
 				>
 					<h2>{selectedChallenge.value.name}</h2>
 					<div style={{ display: "flex", flexDirection: "column" }}>
