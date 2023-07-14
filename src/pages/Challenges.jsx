@@ -35,7 +35,14 @@ const Challenges = () => {
 			const response = await axios.get(
 				"https://getfitapi.harshithpaladi.dev/api/challenges"
 			);
-			setChallenges(response.data);
+			
+			const formattedChallenges = response.data.map((challenge) => ({
+				...challenge,
+				startDateFormatted: new Date(challenge.startDate).toLocaleDateString("en-GB"),
+				endDateFormatted: new Date(challenge.endDate).toLocaleDateString("en-GB"),
+			}));
+
+			setChallenges(formattedChallenges);
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -326,6 +333,8 @@ const Challenges = () => {
 				<Column field="description" header="Description"></Column>
 				<Column field="challengeType" header="Challenge Type" sortable></Column>
 				<Column field="challengeGoal" header="Challenge Goal" sortable></Column>
+				<Column field="startDateFormatted" header="Start Date" sortable sortField="startDate"></Column>
+				<Column field="endDateFormatted" header="End Date" sortable sortField="endDate"></Column>
 				<Column field="createdBy" header="Created By" sortable></Column>
 				<Column header="Actions" body={renderChallengeActions}></Column>
 				<Column header="Delete" body={renderChallengeDeleteButton}></Column>
@@ -337,7 +346,7 @@ const Challenges = () => {
 					visible={true}
 					onHide={onHide}
 					header="Challenge Details"
-					style={{ width: "50vw", flexDirection: "column", display: "flex" }}
+					style={{ width: "80vw", flexDirection: "column", display: "flex" }}
 				>
 					<h2>{selectedChallenge.value.name}</h2>
 					<div style={{ display: "flex", flexDirection: "column" }}>
@@ -359,11 +368,11 @@ const Challenges = () => {
 						)}
 						<div>
 							<span>Start Date: </span>
-							<span>{selectedChallenge.value.startDate}</span>
+							<span>{selectedChallenge.value.startDateFormatted}</span>
 						</div>
 						<div>
 							<span>End Date: </span>
-							<span>{selectedChallenge.value.endDate}</span>
+							<span>{selectedChallenge.value.endDateFormatted}</span>
 						</div>
 						<div>
 							<span>Created By: </span>
