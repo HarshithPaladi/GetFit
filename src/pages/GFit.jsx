@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 const Gfit = () => {
 	const [authorizationUrl, setAuthorizationUrl] = useState("");
 	const [cookies] = useCookies(["jwt"]);
+	let isIntegrationComplete = localStorage.getItem("googleFitIntegration");
 
 	useEffect(() => {
 		const getAuthorizationUrl = async () => {
@@ -55,6 +56,19 @@ const Gfit = () => {
 						window.location.href = authorizationUrl;
 					}}
 				/>
+				{isIntegrationComplete && (
+					<Button
+						variant="primary"
+						label="Disconnect from Google Fit"
+						icon="pi pi-google"
+						link
+						onClick={() => {
+							localStorage.removeItem("googleFitIntegration");
+							window.location.href ="https://getfit.harshithpaladi.dev/oauth/disconnect";
+						}}
+					/>
+				)}
+
 			</Card>
 		</div>
 	);

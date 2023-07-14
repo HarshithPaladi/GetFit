@@ -4,11 +4,14 @@ import { useCookies } from "react-cookie";
 import { Dialog } from "primereact/dialog";
 import { ProgressBar } from "primereact/progressbar";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const CallbackPage = () => {
 	const [cookies] = useCookies(["jwt"]);
 	const [showDialog, setShowDialog] = useState(false);
 	const [success, setSuccess] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const history = useHistory();
 
 	useEffect(() => {
 		// Get the query parameters from the URL
@@ -35,9 +38,10 @@ const CallbackPage = () => {
 					.then((callbackResponse) => {
 						// Handle the response from the callback API
 						console.log(callbackResponse.data);
-
+                        localStorage.setItem("googleFitIntegration", "true");
 						// Show the success dialog
 						setSuccess(true);
+						setLoading(false);
 						setShowDialog(true);
 					})
 					.catch((callbackError) => {
@@ -45,6 +49,7 @@ const CallbackPage = () => {
 						console.error(callbackError);
 						// Show the error dialog
 						setSuccess(false);
+						setLoading(false);
 						setShowDialog(true);
 					});
 			})
@@ -53,6 +58,7 @@ const CallbackPage = () => {
 				console.error(error);
 				// Show the error dialog
 				setSuccess(false);
+				setLoading(false);
 				setShowDialog(true);
 			});
 	}, []);
@@ -60,14 +66,19 @@ const CallbackPage = () => {
 	const onHideDialog = () => {
 		// Close the dialog
 		setShowDialog(false);
-		// // Close the window after the dialog is closed
-		// window.close();
+		// Navigate to "gfit" component page
+        let navigate = useNavigate();
+        navigate("/gfit");
 	};
 
 	return (
 		<div>
-			<h1>Callback Page</h1>
-			<p>Performing callback request...</p>
+			<h1>OAuth Callback Page</h1>
+			{loading ? (
+				<ProgressBar mode="indeterminate" style={{ height: "2px" }} />
+			) : (
+				<p>Performed callback request...</p>
+			)}
 
 			<Dialog
 				visible={showDialog}
