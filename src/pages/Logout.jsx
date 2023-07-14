@@ -23,8 +23,10 @@ const Logout = () => {
 
 				// Remove the JWT cookie
 				removeCookie("jwt");
+                removeCookie("refreshToken");
 				// Remove the userName from localStorage
-				localStorage.removeItem("userName");
+                localStorage.removeItem("userName");
+                localStorage.removeItem("googleFitIntegration");
 
 				// Redirect the user to the login page or perform any other necessary actions
 				// Replace the path with the appropriate route for your application
