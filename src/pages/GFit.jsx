@@ -8,7 +8,29 @@ const Gfit = () => {
 	const [authorizationUrl, setAuthorizationUrl] = useState("");
 	const [cookies] = useCookies(["jwt"]);
 	let isIntegrationComplete = localStorage.getItem("googleFitIntegration");
+	const handleGoogleFitDisconnect = async () => { 
+		try {
+			// Make a request to the revoke endpoint
+			await axios.post(
+				"https://getfitapi.harshithpaladi.dev/api/auth/gfit/disconnect",
+				null,
+				{
+					headers: {
+						Authorization: `Bearer ${cookies.jwt}`,
+					},
+					withCredentials: true,
+				}
+			);
 
+			localStorage.removeItem("googleFitIntegration");
+			// Redirect the user to
+			// Replace the path with the appropriate route for your application
+			window.location.href = "/gfit";
+		} catch (error) {
+			console.error(error);
+		}
+
+	};
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
 		if (!userName) {
@@ -68,10 +90,7 @@ const Gfit = () => {
 						label="Disconnect from Google Fit"
 						icon="pi pi-google"
 						link
-						onClick={() => {
-							localStorage.removeItem("googleFitIntegration");
-							window.location.href ="https://getfit.harshithpaladi.dev/oauth/disconnect";
-						}}
+						onClick={handleGoogleFitDisconnect}
 					/>
 				)}
 
