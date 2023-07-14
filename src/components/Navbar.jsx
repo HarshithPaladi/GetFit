@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 
 const AppNavbar = () => {
-	const username = localStorage.getItem("userName");
+	// const username = localStorage.getItem("userName");
+	const [username, setUsername] = useState('');
+
+	useEffect(() => {
+		const userName = localStorage.getItem("userName");
+		setUsername(userName);
+	}, []);
 	return (
 		<Navbar bg="dark" variant="dark" expand="lg">
 			<Navbar.Brand href="/">GetFit</Navbar.Brand>
