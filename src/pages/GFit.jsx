@@ -66,7 +66,7 @@ const Gfit = () => {
 							withCredentials: true,
 						}
 					);
-					setIsIntegrationComplete(response.data.GFit_Connected);
+					setIsIntegrationComplete(response.data.gFit_Connected);
 				} catch (error) {
 					console.error(error);
 				}
