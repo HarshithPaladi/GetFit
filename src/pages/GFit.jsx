@@ -48,7 +48,7 @@ const Gfit = () => {
 			>
 				<Button
 					variant="primary"
-					label="Connect with Google Fit"
+					label= {isIntegrationComplete ? "Reconnect to Google Fit" : "Connect to Google Fit"}
 					icon="pi pi-google"
 					disabled={!authorizationUrl}
 					link

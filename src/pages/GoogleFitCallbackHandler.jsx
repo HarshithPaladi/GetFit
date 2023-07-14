@@ -66,8 +66,9 @@ const CallbackPage = () => {
 		// Close the dialog
 		setShowDialog(false);
 		// Navigate to "gfit" component page
-        let navigate = useNavigate();
-        navigate("/gfit");
+        // let navigate = useNavigate();
+        // navigate("/gfit");
+        window.location.href = "https://getfit.harshithpaladi.dev/gfit";
 	};
 
 	return (
