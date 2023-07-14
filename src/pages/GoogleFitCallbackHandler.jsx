@@ -11,7 +11,6 @@ const CallbackPage = () => {
 	const [showDialog, setShowDialog] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const history = useHistory();
 
 	useEffect(() => {
 		// Get the query parameters from the URL
