@@ -90,8 +90,9 @@ const Challenges = () => {
 			endDate: formData.get("endDate"),
 			createdBy: "string",
 		};
-
+		console.log("Challenge: ", challenge);
 		try {
+			setIsLoading(true); 
 			const response = await axios.post(
 				"https://getfitapi.harshithpaladi.dev/api/challenges",
 				challenge
@@ -99,8 +100,10 @@ const Challenges = () => {
 			setChallenges([...challenges, response.data]);
 			setShowCreateModal(false);
 			await fetchData();
+			setIsLoading(false);
 		} catch (error) {
 			console.error(error);
+			setIsLoading(false);
 		}
 	};
 
@@ -225,9 +228,17 @@ const Challenges = () => {
 							required
 						/>
 					</div>
-					<button type="submit" className="btn btn-primary">
-						Create
-					</button>
+
+					<Button
+						label="Create"
+						icon="pi pi-refresh"
+						loading={isLoading}
+						onClick={() => {
+							// Manually submit the form
+							document.getElementById("createChallengeForm").submit();
+						}}
+						iconPos="right"
+					/>
 				</form>
 			</Modal.Body>
 		</Modal>
