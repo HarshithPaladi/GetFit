@@ -79,11 +79,11 @@ const CallbackPage = () => {
 
 	return (
 		<div>
-			<h1>OAuth Callback Page</h1>
+			<h1>Google Fit OAuth Callback Page</h1>
 			{loading ? (
 				<ProgressBar mode="indeterminate" style={{ height: "2px" }} />
 			) : (
-				<p>Performed callback request...</p>
+				<p>Success ...</p>
 			)}
 
 			<Dialog

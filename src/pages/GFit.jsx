@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
@@ -8,11 +9,13 @@ const Gfit = () => {
 	const [authorizationUrl, setAuthorizationUrl] = useState("");
 	const [isIntegrationComplete, setIsIntegrationComplete] = useState(false);
 	const [cookies] = useCookies(["jwt"]);
+	const [dialogVisible, setDialogVisible] = useState(false);
+	const [deleteStatus, setDeleteStatus] = useState(false);
 
 	const handleGoogleFitDisconnect = async () => {
 		try {
 			// Make a request to the revoke endpoint
-			await axios.post(
+			const response = axios.post(
 				"https://getfitapi.harshithpaladi.dev/oauth/disconnect",
 				null,
 				{
@@ -22,6 +25,8 @@ const Gfit = () => {
 					withCredentials: true,
 				}
 			);
+			// Set the delete status to true
+			setDeleteStatus(true);
 
 			// Redirect the user to the appropriate route
 			window.location.href = "/gfit";
@@ -113,6 +118,25 @@ const Gfit = () => {
 						link
 						onClick={handleGoogleFitDisconnect}
 					/>
+				)}
+				{dialogVisible && (
+					<Dialog
+						header="Disconnect from Google Fit"
+						visible={dialogVisible}
+						style={{ width: "80vw" }}
+						onHide={() => setDialogVisible(false)}
+					>
+						<div>
+							{deleteStatus ? (
+								<FaCheck size={40} style={{ color: "green" }} />
+							) : (
+								<FaExclamationTriangle size={40} style={{ color: "red" }} />
+							)}
+						</div>
+						<div style={{ marginTop: "10px" }}>
+							{deleteStatus ? "Google Fit Disconnected successfully!" : "Error occurred."}
+						</div>
+					</Dialog>
 				)}
 			</Card>
 		</div>
