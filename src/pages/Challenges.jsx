@@ -65,7 +65,7 @@ const Challenges = () => {
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [setChallenges]);
 
 	const handleCreateChallenge = async (event) => {
 		event.preventDefault();
