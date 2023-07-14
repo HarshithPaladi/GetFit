@@ -65,7 +65,7 @@ const Challenges = () => {
 
 	useEffect(() => {
 		fetchData();
-	}, [setChallenges]);
+	}, []);
 
 	const handleCreateChallenge = async (event) => {
 		event.preventDefault();
@@ -91,6 +91,7 @@ const Challenges = () => {
 			);
 			setChallenges([...challenges, response.data]);
 			setShowCreateModal(false);
+			await fetchData();
 		} catch (error) {
 			console.error(error);
 		}
