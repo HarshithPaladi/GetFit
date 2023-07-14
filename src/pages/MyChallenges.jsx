@@ -120,8 +120,14 @@ const MyChallenges = () => {
 		}
 	};
 	useEffect(() => {
-		fetchChallenges();
-		console.log("Selected challenge progress: ", selectedChallengeProgress);
+		const userName = localStorage.getItem("userName");
+		if (!userName) {
+			window.location.href = "https://getfit.harshithpaladi.dev/login";
+		}
+		else {
+			fetchChallenges();
+			console.log("Selected challenge progress: ", selectedChallengeProgress);
+		}
 	}, [selectedChallengeProgress]);
 
 	return (

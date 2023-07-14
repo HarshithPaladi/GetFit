@@ -12,54 +12,60 @@ const CallbackPage = () => {
 	const [success, setSuccess] = useState(false);
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		// Get the query parameters from the URL
-		const urlParams = new URLSearchParams(window.location.search);
-		const code = urlParams.get("code");
-		const scope = urlParams.get("scope");
-		axios.defaults.withCredentials = true;
-		axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
-		// Make a GET request to the backend API to get the userId
-		axios
-			.get("https://getfitapi.harshithpaladi.dev/api/auth/userId")
-			.then((response) => {
-				const userId = response.data;
+    useEffect(() => {
+        const userName = localStorage.getItem("userName");
+        if (!userName) {
+            window.location.href = "https://getfit.harshithpaladi.dev/login";
+        }
+        else {
+            // Get the query parameters from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get("code");
+            const scope = urlParams.get("scope");
+            axios.defaults.withCredentials = true;
+            axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
+            // Make a GET request to the backend API to get the userId
+            axios
+                .get("https://getfitapi.harshithpaladi.dev/api/auth/userId")
+                .then((response) => {
+                    const userId = response.data;
 
-				// Make a GET request to the callback API with the parameters and userId
-				axios
-					.get("https://getfitapi.harshithpaladi.dev/oauth/callback", {
-						params: {
-							code: code,
-							scope: scope,
-							userId: userId,
-						},
-					})
-					.then((callbackResponse) => {
-						// Handle the response from the callback API
-						console.log(callbackResponse.data);
-                        localStorage.setItem("googleFitIntegration", "true");
-						// Show the success dialog
-						setSuccess(true);
-						setLoading(false);
-						setShowDialog(true);
-					})
-					.catch((callbackError) => {
-						// Handle errors from the callback API request
-						console.error(callbackError);
-						// Show the error dialog
-						setSuccess(false);
-						setLoading(false);
-						setShowDialog(true);
-					});
-			})
-			.catch((error) => {
-				// Handle errors from the userId API request
-				console.error(error);
-				// Show the error dialog
-				setSuccess(false);
-				setLoading(false);
-				setShowDialog(true);
-			});
+                    // Make a GET request to the callback API with the parameters and userId
+                    axios
+                        .get("https://getfitapi.harshithpaladi.dev/oauth/callback", {
+                            params: {
+                                code: code,
+                                scope: scope,
+                                userId: userId,
+                            },
+                        })
+                        .then((callbackResponse) => {
+                            // Handle the response from the callback API
+                            console.log(callbackResponse.data);
+                            localStorage.setItem("googleFitIntegration", "true");
+                            // Show the success dialog
+                            setSuccess(true);
+                            setLoading(false);
+                            setShowDialog(true);
+                        })
+                        .catch((callbackError) => {
+                            // Handle errors from the callback API request
+                            console.error(callbackError);
+                            // Show the error dialog
+                            setSuccess(false);
+                            setLoading(false);
+                            setShowDialog(true);
+                        });
+                })
+                .catch((error) => {
+                    // Handle errors from the userId API request
+                    console.error(error);
+                    // Show the error dialog
+                    setSuccess(false);
+                    setLoading(false);
+                    setShowDialog(true);
+                });
+        }
 	}, []);
 
 	const onHideDialog = () => {

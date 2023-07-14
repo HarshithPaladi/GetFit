@@ -17,7 +17,7 @@ const AppNavbar = () => {
 					)}
 					<Nav.Link href="/gfit">GFit</Nav.Link>
 					<Nav.Link href="/challenge">Challenges</Nav.Link>
-					<Nav.Link href="/Vitals">Activity</Nav.Link>
+					<Nav.Link href="/activity-today">Activity</Nav.Link>
 					<Nav.Link href="/challenge/subscribed">My Challenges</Nav.Link>
 					{username && (
 						<>

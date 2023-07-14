@@ -181,3 +181,11 @@ body {
 .form-control-react{
   width:250px;
 }
+.footer-link{
+  text-decoration: none;
+  color: white;
+}
+.footer-link:hover{
+  color: whitesmoke;
+  opacity: 0.8;
+}

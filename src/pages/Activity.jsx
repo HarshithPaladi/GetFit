@@ -4,9 +4,10 @@ import axios from "axios";
 import { FaSync } from "react-icons/fa";
 import { Button } from "primereact/button";
 import { useCookies } from "react-cookie";
-import "../assets/css/Vitals.css";
+import "../assets/css/Activity.css";
+import Footer from "../components/Footer";
 
-const Vitals = () => {
+const Activity = () => {
 	const [steps, setSteps] = useState(null);
 	const [distance, setDistance] = useState(null);
 	const [calories, setCalories] = useState(null);
@@ -63,7 +64,12 @@ const Vitals = () => {
 	};
 
 	useEffect(() => {
-		handleFetchData();
+		const userName = localStorage.getItem("userName");
+		if (!userName) {
+			window.location.href = "https://getfit.harshithpaladi.dev/login";
+		} else {
+			handleFetchData();
+		}
 	}, []);
 
 	return (
@@ -109,8 +115,9 @@ const Vitals = () => {
 					</div>
 				</Card.Body>
 			</Card>
+			<Footer />
 		</Container>
 	);
 };
 
-export default Vitals;
+export default Activity;

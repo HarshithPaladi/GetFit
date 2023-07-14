@@ -6,12 +6,11 @@ import RegisterComponent from "./pages/RegisterPage";
 import HomePage from "./pages/Homepage";
 import GFit from "./pages/GFit";
 import Challenges from "./pages/Challenges";
-import Vitals from "./pages/Vitals";
+import Activity from "./pages/Activity";
 import MyChallenges from "./pages/MyChallenges";
 import Logout from "./pages/Logout";
 import CallbackPage from "./pages/GoogleFitCallbackHandler";
 import "./App.css";
-
 
 function App() {
 	return (
@@ -23,7 +22,7 @@ function App() {
 				<Route path="/register" element={<RegisterComponent />} />
 				<Route path="/gfit" element={<GFit />} />
 				<Route path="/challenge" element={<Challenges />} />
-				<Route path="/Vitals" element={<Vitals />} />
+				<Route path="/activity-today" element={<Activity />} />
 				<Route path="/challenge/subscribed" element={<MyChallenges />} />
 				<Route path="/logout" element={<Logout />} />
 				<Route path="/googlefit/callback" element={<CallbackPage />} />

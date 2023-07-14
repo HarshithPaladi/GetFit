@@ -8,6 +8,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Dialog } from "primereact/dialog";
 import "../assets/css/Challenges.css";
+import Footer from "../components/Footer";
 
 const Challenges = () => {
 	const [challenges, setChallenges] = useState([]);
@@ -64,7 +65,13 @@ const Challenges = () => {
 	};
 
 	useEffect(() => {
-		fetchData();
+		const userName = localStorage.getItem("userName");
+		if (!userName) {
+			window.location.href = "https://getfit.harshithpaladi.dev/login";
+		}
+		else {
+			fetchData();
+		}
 	}, []);
 
 	const handleCreateChallenge = async (event) => {

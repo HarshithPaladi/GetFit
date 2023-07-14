@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const HomePage = ({ username }) => {
 	const name = localStorage.getItem("userName") || "Guest";
@@ -56,21 +57,23 @@ const HomePage = ({ username }) => {
 					</div>
 				</div>
 			</section>
-
-			<section className="cta-section">
-				<div className="container">
-					<h2 className="section-title">Ready to Get Fit?</h2>
-					<p className="cta-description">
-						Sign up now and start your fitness journey today!
-					</p>
-					<Link to="/register">
-						<Button
-							label="Sign Up"
-							className="p-button-raised p-button-lg cta-button"
-						/>
-					</Link>
-				</div>
-			</section>
+			{!name && (
+				<section className="cta-section">
+					<div className="container">
+						<h2 className="section-title">Ready to Get Fit?</h2>
+						<p className="cta-description">
+							Sign up now and start your fitness journey today!
+						</p>
+						<Link to="/register">
+							<Button
+								label="Sign Up"
+								className="p-button-raised p-button-lg cta-button"
+							/>
+						</Link>
+					</div>
+				</section>
+			)}
+			<Footer />
 		</div>
 	);
 };
