@@ -6,9 +6,10 @@ import { useCookies } from "react-cookie";
 
 const Gfit = () => {
 	const [authorizationUrl, setAuthorizationUrl] = useState("");
+	const [isIntegrationComplete, setIsIntegrationComplete] = useState(false);
 	const [cookies] = useCookies(["jwt"]);
-	let isIntegrationComplete = localStorage.getItem("googleFitIntegration");
-	const handleGoogleFitDisconnect = async () => { 
+
+	const handleGoogleFitDisconnect = async () => {
 		try {
 			// Make a request to the revoke endpoint
 			await axios.post(
@@ -22,21 +23,18 @@ const Gfit = () => {
 				}
 			);
 
-			localStorage.removeItem("googleFitIntegration");
-			// Redirect the user to
-			// Replace the path with the appropriate route for your application
+			// Redirect the user to the appropriate route
 			window.location.href = "/gfit";
 		} catch (error) {
 			console.error(error);
 		}
-
 	};
+
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
 		if (!userName) {
 			window.location.href = "https://getfit.harshithpaladi.dev/login";
-		}
-		else {
+		} else {
 			const getAuthorizationUrl = async () => {
 				try {
 					const response = await axios.get(
@@ -56,6 +54,25 @@ const Gfit = () => {
 			};
 
 			getAuthorizationUrl();
+
+			const checkGoogleFitIntegrationStatus = async () => {
+				try {
+					const response = await axios.get(
+						"https://getfitapi.harshithpaladi.dev/oauth/check-status",
+						{
+							headers: {
+								Authorization: `Bearer ${cookies.jwt}`,
+							},
+							withCredentials: true,
+						}
+					);
+					setIsIntegrationComplete(response.data.GFit_Connected);
+				} catch (error) {
+					console.error(error);
+				}
+			};
+
+			checkGoogleFitIntegrationStatus();
 		}
 	}, []); // Empty dependency array to run the effect only once
 
@@ -76,7 +93,11 @@ const Gfit = () => {
 			>
 				<Button
 					variant="primary"
-					label= {isIntegrationComplete ? "Reconnect to Google Fit" : "Connect to Google Fit"}
+					label={
+						isIntegrationComplete
+							? "Reconnect to Google Fit"
+							: "Connect to Google Fit"
+					}
 					icon="pi pi-google"
 					disabled={!authorizationUrl}
 					link
@@ -93,7 +114,6 @@ const Gfit = () => {
 						onClick={handleGoogleFitDisconnect}
 					/>
 				)}
-
 			</Card>
 		</div>
 	);
