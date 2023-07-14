@@ -10,25 +10,31 @@ const Gfit = () => {
 	let isIntegrationComplete = localStorage.getItem("googleFitIntegration");
 
 	useEffect(() => {
-		const getAuthorizationUrl = async () => {
-			try {
-				const response = await axios.get(
-					"https://getfitapi.harshithpaladi.dev/oauth/authorize",
-					{
-						headers: {
-							Authorization: `Bearer ${cookies.jwt}`,
-						},
-					}
-				);
-				console.log(response.data.url);
-				setAuthorizationUrl(response.data.url);
-			} catch (error) {
-				// Handle error
-				console.log(error);
-			}
-		};
+		const userName = localStorage.getItem("userName");
+		if (!userName) {
+			window.location.href = "https://getfit.harshithpaladi.dev/login";
+		}
+		else {
+			const getAuthorizationUrl = async () => {
+				try {
+					const response = await axios.get(
+						"https://getfitapi.harshithpaladi.dev/oauth/authorize",
+						{
+							headers: {
+								Authorization: `Bearer ${cookies.jwt}`,
+							},
+						}
+					);
+					console.log(response.data.url);
+					setAuthorizationUrl(response.data.url);
+				} catch (error) {
+					// Handle error
+					console.log(error);
+				}
+			};
 
-		getAuthorizationUrl();
+			getAuthorizationUrl();
+		}
 	}, []); // Empty dependency array to run the effect only once
 
 	return (
