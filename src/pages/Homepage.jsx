@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 
 const HomePage = ({ username }) => {
-	const name = localStorage.getItem("userName") || "Guest";
+	let name = localStorage.getItem("userName") || "Guest";
 
 	return (
 		<div className="home-container">
