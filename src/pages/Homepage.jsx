@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 
 const HomePage = ({ username }) => {
 	let name = localStorage.getItem("userName") || "Guest";
+	let isLoggedIn = localStorage.getItem("userName") ? true : false;
 
 	return (
 		<div className="home-container">
@@ -57,7 +58,7 @@ const HomePage = ({ username }) => {
 					</div>
 				</div>
 			</section>
-			{!name && (
+			{!isLoggedIn && (
 				<section className="cta-section">
 					<div className="container">
 						<h2 className="section-title">Ready to Get Fit?</h2>
