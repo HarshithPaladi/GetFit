@@ -8,7 +8,7 @@ const AppNavbar = () => {
 	useEffect(() => {
 		const userName = localStorage.getItem("userName");
 		setUsername(userName);
-	}, []);
+	}, [username]);
 	return (
 		<Navbar bg="dark" variant="dark" expand="lg">
 			<Navbar.Brand href="/">GetFit</Navbar.Brand>
