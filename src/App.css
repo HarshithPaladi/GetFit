@@ -189,3 +189,12 @@ body {
   color: whitesmoke;
   opacity: 0.8;
 }
+/* .title-div{
+  @media screen and (min-width: 600px) {
+    width: 65vw;
+  }
+}.buttons-div{
+  @media screen and (min-width: 600px) {
+    width: 35vw;
+  }
+} */

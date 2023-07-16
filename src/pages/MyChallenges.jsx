@@ -25,6 +25,11 @@ const MyChallenges = () => {
 	const handleViewChallenge = async (challenge) => {
 		console.log("Selected challenge: ", challenge);
 		setSelectedChallenge(challenge);
+		setSelectedChallengeProgress({
+			progressValue: 0,
+			targetValue: 0,
+			progressPercentage: 0,
+		});
 		try {
 			const response = await axios.get(
 				`https://getfitapi.harshithpaladi.dev/api/Challenges/${challenge.value.challengeId}/progress`
@@ -132,14 +137,19 @@ const MyChallenges = () => {
 
 	return (
 		<>
-			<Button
-				label="Refresh"
-				icon="pi pi-refresh"
-				loading={isLoading}
-				onClick={handleRefreshData}
-				iconPos="right"
-				style={{ marginTop: "1rem" }}
-			/>
+			<div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center", flexWrap:"wrap"}}>
+				<h2 style={{ marginTop: "1rem" }}>Subscribed Challenges</h2>
+				<Button
+					// label="Refresh"
+					icon="pi pi-refresh"
+					loading={isLoading}
+					onClick={handleRefreshData}
+					iconPos="right"
+					style={{ marginLeft: "1rem", marginTop: "1rem" }}
+					rounded
+					raised
+				/>
+			</div>
 			<DataTable
 				value={challenges}
 				selectionMode="single"

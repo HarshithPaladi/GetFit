@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card } from "react-bootstrap";
 import axios from "axios";
-import { FaSync } from "react-icons/fa";
 import { Button } from "primereact/button";
 import { useCookies } from "react-cookie";
+import { Dialog } from "primereact/dialog";
 import "../assets/css/Activity.css";
 import Footer from "../components/Footer";
 
@@ -13,6 +13,8 @@ const Activity = () => {
 	const [calories, setCalories] = useState(null);
 	const [cookies] = useCookies(["jwt"]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [errorDialogVisible, setErrorDialogVisible] = useState(false);
+	const [errorDialogMessage, setErrorDialogMessage] = useState("");
 
 	const fetchData = async (endpoint) => {
 		try {
@@ -28,6 +30,8 @@ const Activity = () => {
 			return response.data;
 		} catch (error) {
 			console.error(error);
+			setErrorDialogMessage(`Error in fetching data`);
+			setErrorDialogVisible(true);
 		} finally {
 			setIsLoading(false);
 		}
@@ -45,7 +49,6 @@ const Activity = () => {
 			0
 		).toISOString();
 		const endTime = now.toISOString();
-		// get number of milliseconds between start and end time
 		const bucketDurationMillis = now.getTime() - new Date(startTime).getTime();
 
 		const stepsData = await fetchData(
@@ -115,6 +118,22 @@ const Activity = () => {
 					</div>
 				</Card.Body>
 			</Card>
+
+			<Dialog
+				visible={errorDialogVisible}
+				onHide={() => setErrorDialogVisible(false)}
+				header="Error"
+				footer={
+					<Button label="Refresh" onClick={() => {
+						setErrorDialogVisible(false);
+						window.location.reload();
+					}} />
+				}
+			>
+				<p>{errorDialogMessage}</p>
+				<p>Refresh the page or check GFit integration status.</p>
+			</Dialog>
+
 			<Footer />
 		</Container>
 	);

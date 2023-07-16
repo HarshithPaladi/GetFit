@@ -17,6 +17,9 @@ const Challenges = () => {
 	const [selectedChallenge, setSelectedChallenge] = useState(null);
 	const [selectedChallenges, setSelectedChallenges] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [startDate, setStartDate] = useState("");
+	const [endDate, setEndDate] = useState("");
+	const currentDate = new Date().toISOString().split("T")[0];
 	const [cookies] = useCookies(["jwt"]);
 	axios.defaults.withCredentials = true;
 	axios.defaults.headers.common["Authorization"] = `Bearer ${cookies.jwt}`;
@@ -36,11 +39,15 @@ const Challenges = () => {
 			const response = await axios.get(
 				"https://getfitapi.harshithpaladi.dev/api/challenges"
 			);
-			
+
 			const formattedChallenges = response.data.map((challenge) => ({
 				...challenge,
-				startDateFormatted: new Date(challenge.startDate).toLocaleDateString("en-GB"),
-				endDateFormatted: new Date(challenge.endDate).toLocaleDateString("en-GB"),
+				startDateFormatted: new Date(challenge.startDate).toLocaleDateString(
+					"en-GB"
+				),
+				endDateFormatted: new Date(challenge.endDate).toLocaleDateString(
+					"en-GB"
+				),
 			}));
 
 			setChallenges(formattedChallenges);
@@ -68,8 +75,7 @@ const Challenges = () => {
 		const userName = localStorage.getItem("userName");
 		if (!userName) {
 			window.location.href = "https://getfit.harshithpaladi.dev/login";
-		}
-		else {
+		} else {
 			fetchData();
 		}
 	}, []);
@@ -80,19 +86,38 @@ const Challenges = () => {
 		const form = event.target;
 		const formData = new FormData(form);
 
+		const name = formData.get("name");
+		const description = formData.get("description");
+		const challengeType = formData.get("challengeType");
+		const challengeGoal = formData.get("challengeGoal");
+		const startDate = new Date(formData.get("startDate"));
+		const endDate = new Date(formData.get("endDate"));
+
+		// Validate start and end dates
+		const currentDate = new Date();
+		const oneMonthFromNow = new Date();
+		oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+
+		if (endDate < startDate) {
+			console.error("End date cannot be less than the start date.");
+			return;
+		}
+
 		const challenge = {
 			challengeId: "string",
-			name: formData.get("name"),
-			description: formData.get("description"),
-			challengeType: formData.get("challengeType"),
-			challengeGoal: formData.get("challengeGoal"),
-			startDate: formData.get("startDate"),
-			endDate: formData.get("endDate"),
+			name,
+			description,
+			challengeType,
+			challengeGoal,
+			startDate: startDate,
+			endDate: endDate,
 			createdBy: "string",
 		};
+
 		console.log("Challenge: ", challenge);
+
 		try {
-			setIsLoading(true); 
+			setIsLoading(true);
 			const response = await axios.post(
 				"https://getfitapi.harshithpaladi.dev/api/challenges",
 				challenge
@@ -214,6 +239,20 @@ const Challenges = () => {
 							name="startDate"
 							className="form-control"
 							required
+							value={startDate}
+							onChange={(e) => setStartDate(e.target.value)}
+							//min date is 1 month from now
+							min={
+								currentDate
+									? new Date(
+											new Date(currentDate).setMonth(
+												new Date(currentDate).getMonth() - 1
+											)
+									  )
+											.toISOString()
+											.split("T")[0]
+									: undefined
+							}
 						/>
 					</div>
 					<div className="mb-3">
@@ -226,6 +265,31 @@ const Challenges = () => {
 							name="endDate"
 							className="form-control"
 							required
+							value={endDate} // Set the value from the state
+							onChange={(e) => setEndDate(e.target.value)} // Update the state on input change
+							// Minimum date is the value of the start date input
+							min={
+								startDate
+									? new Date(
+											new Date(startDate).setDate(
+												new Date(startDate).getDate() + 1
+											)
+									  )
+											.toISOString()
+											.split("T")[0]
+									: startDate
+							}
+							max={
+								startDate
+									? new Date(
+											new Date(startDate).setMonth(
+												new Date(startDate).getMonth() + 1
+											)
+									  )
+											.toISOString()
+											.split("T")[0] // Maximum date is within 1 month from the start date
+									: undefined // Only calculate maximum date if the start date is set
+							}
 						/>
 					</div>
 
@@ -319,23 +383,41 @@ const Challenges = () => {
 
 	return (
 		<div>
-			<Button variant="primary" onClick={() => setShowCreateModal(true)}
-				style={{ marginRight: "2rem", marginTop: "1rem" }}
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "row",
+					alignItems: "center",
+					justifyContent: "center",
+					flexWrap: "wrap",
+				}}
 			>
-				Create Challenge
-			</Button>
-
-			{/* <Button variant="primary" onClick={() => history.push("/challenge/subscribed")}>
-				My Challenges
-			</Button> */}
-			<Button
-				label="Refresh"
-				icon="pi pi-refresh"
-				loading={isLoading}
-				onClick={handleRefreshData}
-				iconPos="right"
-			/>
-
+				<div className="title-div">
+					<h2 style={{ marginTop: "1rem", marginLeft:"2rem" }}>Available Challenges</h2>
+				</div>
+				<Button
+					// label="Refresh Data"
+					icon="pi pi-refresh"
+					loading={isLoading}
+					onClick={handleRefreshData}
+					iconPos="right"
+					style={{ marginTop: "0.5rem", marginLeft: "1rem", marginRight: "1rem" }}
+					rounded
+					raised
+				/>
+				<div
+				style={{display:"grid", alignItems:"center"}}>
+					<Button
+						label="Create Challenge"
+						onClick={() => setShowCreateModal(true)}
+						style={{
+							marginTop: "0.5rem",
+						}}
+						rounded
+						raised
+					/>
+				</div>
+			</div>
 			<DataTable
 				value={challenges}
 				paginator
@@ -352,8 +434,18 @@ const Challenges = () => {
 				<Column field="description" header="Description"></Column>
 				<Column field="challengeType" header="Challenge Type" sortable></Column>
 				<Column field="challengeGoal" header="Challenge Goal" sortable></Column>
-				<Column field="startDateFormatted" header="Start Date" sortable sortField="startDate"></Column>
-				<Column field="endDateFormatted" header="End Date" sortable sortField="endDate"></Column>
+				<Column
+					field="startDateFormatted"
+					header="Start Date"
+					sortable
+					sortField="startDate"
+				></Column>
+				<Column
+					field="endDateFormatted"
+					header="End Date"
+					sortable
+					sortField="endDate"
+				></Column>
 				<Column field="createdBy" header="Created By" sortable></Column>
 				<Column header="Actions" body={renderChallengeActions}></Column>
 				<Column header="Delete" body={renderChallengeDeleteButton}></Column>
